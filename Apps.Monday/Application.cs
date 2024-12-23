@@ -1,7 +1,7 @@
 ﻿using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Metadata;
 
-namespace Apps.App;
+namespace Apps.Monday;
 
 public class Application : IApplication, ICategoryProvider
 {

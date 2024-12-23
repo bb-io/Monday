@@ -1,8 +1,8 @@
-﻿using Apps.App.Constants;
+﻿using Apps.Monday.Constants;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Connections;
 
-namespace Apps.App.Connections;
+namespace Apps.Monday.Connections;
 
 public class ConnectionDefinition : IConnectionDefinition
 {
@@ -14,7 +14,7 @@ public class ConnectionDefinition : IConnectionDefinition
             AuthenticationType = ConnectionAuthenticationType.Undefined,
             ConnectionProperties = new List<ConnectionProperty>
             {
-                new(CredsNames.Token) { DisplayName = "API Token", Sensitive = true}
+                new(CredsNames.AccessToken) { DisplayName = "API Token", Sensitive = true }
             }
         }
     };
