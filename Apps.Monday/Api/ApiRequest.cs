@@ -8,14 +8,15 @@ namespace Apps.Monday.Api;
 
 public class ApiRequest : BlackBirdRestRequest
 {
-    public ApiRequest(string resource, Method method, IEnumerable<AuthenticationCredentialsProvider> creds) : base(resource, method, creds)
+    public ApiRequest(string query, IEnumerable<AuthenticationCredentialsProvider> creds) : base(String.Empty, Method.Post, creds)
     {
-        
+        this.AddBody(new { query });
     }
     
-    public ApiRequest(IEnumerable<AuthenticationCredentialsProvider> creds) : base(String.Empty, Method.Post, creds)
+    public ApiRequest(string query, object variables, IEnumerable<AuthenticationCredentialsProvider> creds)
+        : base(string.Empty, Method.Post, creds)
     {
-        
+        this.AddBody(new { query, variables });
     }
     
     protected override void AddAuth(IEnumerable<AuthenticationCredentialsProvider> creds)
