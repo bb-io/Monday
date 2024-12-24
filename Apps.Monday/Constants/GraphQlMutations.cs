@@ -2,8 +2,8 @@
 
 public static class GraphQlMutations
 {
-    public const string CreateItem = @"mutation($board_id: ID!, $item_name: String!, $group_id: String) {
-        create_item (board_id: $board_id, item_name: $item_name, group_id: $group_id) {
+    public const string CreateItem = @"mutation($board_id: ID!, $item_name: String!, $group_id: String, $column_values: JSON) {
+        create_item (board_id: $board_id, item_name: $item_name, group_id: $group_id, column_values: $column_values) {
             id
             name
             created_at

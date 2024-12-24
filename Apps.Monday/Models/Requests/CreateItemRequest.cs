@@ -12,4 +12,10 @@ public class CreateItemRequest : BoardIdentifier
 
     [Display("Group ID"), DataSource(typeof(GroupDataHandler))]
     public string? GroupId { get; set; }
+
+    [Display("Column IDs"), DataSource(typeof(ColumnDataHandler))]
+    public IEnumerable<string>? ColumnIds { get; set; }
+
+    [Display("Column values")]
+    public IEnumerable<string>? ColumnValues { get; set; }
 }

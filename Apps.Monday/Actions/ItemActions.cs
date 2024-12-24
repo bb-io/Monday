@@ -10,6 +10,8 @@ using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Apps.Monday.Actions;
 
@@ -63,6 +65,25 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
         if (!string.IsNullOrEmpty(createItemRequest.GroupId))
         {
             variables.Add("group_id", createItemRequest.GroupId);
+        }
+
+        if (createItemRequest.ColumnIds != null && createItemRequest.ColumnValues != null)
+        {
+            if (createItemRequest.ColumnIds.Count() != createItemRequest.ColumnValues.Count())
+            {
+                throw new PluginMisconfigurationException("Column IDs and column values count should be equal");
+            }
+
+            var zippedColumns = createItemRequest.ColumnIds.Zip(createItemRequest.ColumnValues).ToList();
+
+            var jObject = new JObject();
+            foreach (var zippedColumn in zippedColumns)
+            {
+                jObject.Add(zippedColumn.First, new JValue(zippedColumn.Second));
+            }
+
+            var json = JsonConvert.SerializeObject(jObject);
+            variables.Add("column_values", json);
         }
         
         var request = new ApiRequest(GraphQlMutations.CreateItem, variables, Creds);

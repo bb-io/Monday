@@ -14,4 +14,7 @@ public class BoardResponse
     public double ItemsCount { get; set; }
 
     public List<GroupResponse> Groups { get; set; } = new();
+
+    [DefinitionIgnore]
+    public List<ColumnResponse> Columns { get; set; } = new();
 }

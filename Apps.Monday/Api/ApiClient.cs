@@ -2,6 +2,7 @@ using Apps.Monday.Constants;
 using Apps.Monday.Models.Dtos;
 using Apps.Monday.Models.Responses;
 using Blackbird.Applications.Sdk.Common.Authentication;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Utils.RestSharp;
 using Newtonsoft.Json;
 using RestSharp;
@@ -44,7 +45,7 @@ public class ApiClient(IEnumerable<AuthenticationCredentialsProvider> authentica
     
     protected override Exception ConfigureErrorException(RestResponse response)
     {
-        throw new Exception(response.Content!);
+        throw new PluginApplicationException(response.Content!);
     }
     
     protected override JsonSerializerSettings JsonSettings => JsonConfig.JsonSettings;

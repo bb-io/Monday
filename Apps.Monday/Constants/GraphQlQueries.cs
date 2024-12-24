@@ -40,6 +40,18 @@ public static class GraphQlQueries
                 }
             }
         }
+    ";    
+    
+    public const string GetBoardColumns = @"
+        query($ids: ID!) {
+            boards(ids: [$ids]) {
+                columns {
+                    id
+                    title
+                    type
+                }
+            }
+        }
     ";
 
     public const string GetBoardWithItemsById = @"
