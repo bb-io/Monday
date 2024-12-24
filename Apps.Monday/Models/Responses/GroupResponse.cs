@@ -2,11 +2,11 @@
 
 namespace Apps.Monday.Models.Responses;
 
-public class BoardResponse
+public class GroupResponse
 {
     [Display("Board ID")]
     public string Id { get; set; } = string.Empty;
 
-    [Display("Board name")]
-    public string Name { get; set; } = string.Empty;
+    [Display("Board title")]
+    public string Title { get; set; } = string.Empty;
 }

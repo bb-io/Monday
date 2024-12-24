@@ -5,6 +5,7 @@ using Apps.Monday.Models.Dtos;
 using Apps.Monday.Models.Identifiers;
 using Apps.Monday.Models.Requests;
 using Apps.Monday.Models.Responses;
+using Apps.Monday.Models.Responses.Boards;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Exceptions;

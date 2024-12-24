@@ -16,15 +16,86 @@ public class GraphQlConstants
             }
         }
     ";
-    
+
     public const string GetBoardById = @"
         query($ids: ID!) {
             boards(ids: [$ids]) {
                 id
                 name
+                items_count
                 groups {
                     id
                     title
+                }
+            }
+        }
+    ";
+
+    public const string GetBoardWithItemsById = @"
+        query($ids: ID!) {
+            boards(ids: [$ids]) {
+                items_page {
+                    items {
+                       id
+                       name
+                       created_at
+                       updated_at
+                       email
+                       url
+                       relative_link
+                       updates {
+                            id
+                            text_body
+                            edited_at
+                            assets {
+                                id
+                                name
+                                file_extension
+                            }
+                       }
+                       assets {
+                            id
+                            name
+                            file_extension
+                       }
+                       board {
+                           id
+                           name
+                       }
+                   }
+               }
+            }
+        }
+    ";
+    
+    public const string GetItemById = @"
+        query($ids: ID!) {
+            items(ids: [$ids]) {
+                id
+                name
+                created_at
+                updated_at      
+                email          
+                url
+                relative_link
+                updates {
+                    id
+                    text_body
+                    edited_at
+                    assets {
+                        id
+                        name
+                        file_extension
+                    }
+                }
+                assets {
+                    id
+                    name
+                    file_extension
+                }
+                board {
+                    id,
+                    name
                 }
             }
         }

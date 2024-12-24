@@ -1,7 +1,7 @@
 ﻿using Blackbird.Applications.Sdk.Common;
 using Newtonsoft.Json;
 
-namespace Apps.Monday.Models.Responses;
+namespace Apps.Monday.Models.Responses.Boards;
 
 public class SearchBoardsResponse : BaseSearchResponse<BoardResponse>
 {

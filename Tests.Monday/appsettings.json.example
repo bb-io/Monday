@@ -2,5 +2,9 @@
   "ConnectionDefinition": {
     "access_token": ""
   },
+  "Variables": {
+    "board_id": "",
+    "item_id": ""
+  },
   "TestFolder": "C:\\Users\\..."
 }
