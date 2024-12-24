@@ -21,8 +21,4 @@
         <EmbeddedResource CopyToOutputDirectory="Always" Include="image\icon.png" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="DataSourceHandlers\" />
-    </ItemGroup>
-
 </Project>

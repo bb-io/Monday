@@ -16,4 +16,17 @@ public class GraphQlConstants
             }
         }
     ";
+    
+    public const string GetBoardById = @"
+        query($ids: ID!) {
+            boards(ids: [$ids]) {
+                id
+                name
+                groups {
+                    id
+                    title
+                }
+            }
+        }
+    ";
 }
