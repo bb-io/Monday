@@ -1,4 +1,5 @@
 ﻿using Apps.Monday.Constants;
+using Apps.Monday.Models.Entities;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
 using Blackbird.Applications.Sdk.Utils.RestSharp;

@@ -20,7 +20,7 @@ public class BoardActions(InvocationContext invocationContext) : AppInvocable(in
     public async Task<SearchBoardsResponse> SearchBoardsAsync([ActionParameter] SearchBoardRequest searchBoardRequest)
     {
         return await Client.PaginateAsync<SearchBoardsResponse, BoardResponse>(
-            GraphQlConstants.GetBoards,
+            GraphQlQueries.GetBoards,
             limit: 10  
         );
     }
@@ -29,7 +29,7 @@ public class BoardActions(InvocationContext invocationContext) : AppInvocable(in
     public async Task<BoardResponse> GetBoardAsync([ActionParameter] BoardIdentifier boardIdentifier)
     {
         var variables = new { ids = int.Parse(boardIdentifier.BoardId) };
-        var request = new ApiRequest(GraphQlConstants.GetBoardById, variables, Creds);
+        var request = new ApiRequest(GraphQlQueries.GetBoardById, variables, Creds);
             
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SearchBoardsResponse>>(request);
         if (response?.Data == null || !response.Data.Items.Any())

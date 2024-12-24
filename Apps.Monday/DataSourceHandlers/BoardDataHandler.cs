@@ -13,7 +13,7 @@ public class BoardDataHandler(InvocationContext invocationContext)
         CancellationToken cancellationToken)
     {
         var response = await Client.PaginateAsync<SearchBoardsResponse, BoardResponse>(
-            GraphQlConstants.GetBoards,
+            GraphQlQueries.GetBoards,
             limit: 10
         );
 

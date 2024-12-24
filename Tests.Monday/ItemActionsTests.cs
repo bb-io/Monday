@@ -37,4 +37,50 @@ public class ItemActionsTests : TestBase
         response.Id.Should().NotBeEmpty();
         Console.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
     }
+    
+    [TestMethod]
+    public async Task CreateAndDeleteItem_WithValidId_ShouldReturnItem()
+    {
+        var actions = new ItemActions(InvocationContext);
+        var response = await actions.CreateItemAsync(new()
+        {
+            BoardId = BoardId,
+            ItemName = $"Tests.Monday item {Guid.NewGuid()}",
+            GroupId = "group_title"
+        });
+
+        response.Id.Should().NotBeEmpty();
+        Console.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+
+        await actions.DeleteItemAsync(new()
+        {
+            BoardId = BoardId,
+            ItemId = response.Id
+        });
+        
+        Console.WriteLine("\nSuccessfully deleted newly created item");
+    }
+    
+    [TestMethod]
+    public async Task CreateAndArchiveItem_WithValidId_ShouldArchive()
+    {
+        var actions = new ItemActions(InvocationContext);
+        var response = await actions.CreateItemAsync(new()
+        {
+            BoardId = BoardId,
+            ItemName = $"Tests.Monday item {Guid.NewGuid()}",
+            GroupId = "group_title"
+        });
+
+        response.Id.Should().NotBeEmpty();
+        Console.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+
+        await actions.ArchiveItemAsync(new()
+        {
+            BoardId = BoardId,
+            ItemId = response.Id
+        });
+        
+        Console.WriteLine("\nSuccessfully archived newly created item");
+    }
 }

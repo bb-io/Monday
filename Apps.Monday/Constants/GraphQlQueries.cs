@@ -1,6 +1,6 @@
 ﻿namespace Apps.Monday.Constants;
 
-public class GraphQlConstants
+public static class GraphQlQueries
 {
     public const string GetUserData = "query {users (limit:50) {created_at email account { name id}}}";
 
@@ -23,6 +23,17 @@ public class GraphQlConstants
                 id
                 name
                 items_count
+                groups {
+                    id
+                    title
+                }
+            }
+        }
+    ";
+    
+    public const string GetBoardGroups = @"
+        query($ids: ID!) {
+            boards(ids: [$ids]) {
                 groups {
                     id
                     title

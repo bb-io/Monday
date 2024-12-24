@@ -16,7 +16,7 @@ public class ConnectionValidator: IConnectionValidator
                                    authenticationCredentialsProviders.ToArray();
 
         var apiClient = new ApiClient(credentialsProviders);
-        var request = new ApiRequest(GraphQlConstants.GetUserData, credentialsProviders);
+        var request = new ApiRequest(GraphQlQueries.GetUserData, credentialsProviders);
 
         var response = await apiClient.ExecuteAsync(request, cancellationToken);
         return new()
