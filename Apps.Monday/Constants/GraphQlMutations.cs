@@ -84,4 +84,11 @@ public static class GraphQlMutations
             id
         }
     }";
+    
+    public const string CreateWebhook = @"mutation($board_id: ID!, $url: String!, $event: WebhookEventType!) {
+        create_webhook (board_id: $board_id, url: $url, event: $event) {
+            id 
+            board_id
+        }
+    }";
 }
