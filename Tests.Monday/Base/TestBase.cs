@@ -18,6 +18,8 @@ public class TestBase
                   throw new Exception("Couldn't find board id");
         ItemId = variables.FirstOrDefault(x => x.Key == "item_id")?.Value ??
                   throw new Exception("Couldn't find item id");
+        UpdateId = variables.FirstOrDefault(x => x.Key == "update_id")?.Value ??
+                 throw new Exception("Couldn't find update id");
 
         InvocationContext = new InvocationContext
         {
@@ -29,9 +31,11 @@ public class TestBase
 
     protected IEnumerable<AuthenticationCredentialsProvider> Creds { get; set; }
     
-    protected string BoardId { get; init;  }
+    protected string BoardId { get; }
     
-    protected string ItemId { get; init;  }
+    protected string ItemId { get;  }
+    
+    protected string UpdateId { get;  }
 
     public InvocationContext InvocationContext { get; set; }
 

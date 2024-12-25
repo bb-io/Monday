@@ -4,7 +4,8 @@
   },
   "Variables": {
     "board_id": "",
-    "item_id": ""
+    "item_id": "",
+    "update_id": ""
   },
   "TestFolder": "C:\\Users\\..."
 }

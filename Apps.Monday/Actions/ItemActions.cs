@@ -71,7 +71,7 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
         {
             if (createItemRequest.ColumnIds.Count() != createItemRequest.ColumnValues.Count())
             {
-                throw new PluginMisconfigurationException("Column IDs and column values count should be equal");
+                throw new PluginMisconfigurationException("Column IDs and Column values count should be equal");
             }
 
             var zippedColumns = createItemRequest.ColumnIds.Zip(createItemRequest.ColumnValues).ToList();
@@ -91,6 +91,8 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<CreateItemResponse>>(request);
         return response.Data.CreateItem;
     }
+    
+    // TODO: Update item, Add update to item, Add attachment to item + Events
     
     [Action("Delete item", Description = "Deletes an item based on specified ID")]
     public async Task DeleteItemAsync([ActionParameter] ItemIdentifier itemIdentifier)

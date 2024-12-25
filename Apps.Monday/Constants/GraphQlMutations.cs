@@ -33,6 +33,38 @@ public static class GraphQlMutations
         }
     }";
     
+    public const string CreateUpdate = @"mutation($item_id: ID!, $body: String!) {
+        create_update (item_id: $item_id, body: $body) {
+            id
+            text_body
+            edited_at
+            assets {
+                id
+                name
+                file_extension
+            }
+        }
+    }";
+    
+    public const string EditUpdate = @"mutation($id: ID!, $body: String!) {
+        edit_update (id: $id, body: $body) {
+            id
+            text_body
+            edited_at
+            assets {
+                id
+                name
+                file_extension
+            }
+        }
+    }";
+    
+    public const string DeleteUpdate = @"mutation($id: ID!) {
+        delete_update (id: $id) {
+            id
+        }
+    }";
+    
     public const string DeleteItem = @"mutation($item_id: ID!) {
         delete_item (item_id: $item_id) {
             id

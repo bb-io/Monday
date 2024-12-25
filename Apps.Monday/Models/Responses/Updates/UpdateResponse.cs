@@ -1,6 +1,6 @@
 ﻿using Blackbird.Applications.Sdk.Common;
 
-namespace Apps.Monday.Models.Responses;
+namespace Apps.Monday.Models.Responses.Updates;
 
 public class UpdateResponse
 {

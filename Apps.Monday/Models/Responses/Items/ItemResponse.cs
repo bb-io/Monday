@@ -1,4 +1,5 @@
 ﻿using Apps.Monday.Models.Responses.Boards;
+using Apps.Monday.Models.Responses.Updates;
 using Blackbird.Applications.Sdk.Common;
 
 namespace Apps.Monday.Models.Responses.Items;

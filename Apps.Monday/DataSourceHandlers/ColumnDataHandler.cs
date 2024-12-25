@@ -35,6 +35,6 @@ public class ColumnDataHandler(
         return response.Data.Items.First()
             .Columns
             .Where(x => string.IsNullOrEmpty(context.SearchString) || x.Title.Contains(context.SearchString, StringComparison.OrdinalIgnoreCase))
-            .Select(x => new DataSourceItem(x.Id, x.Title));
+            .Select(x => new DataSourceItem(x.Id, $"[{x.Type}] {x.Title}"));
     }
 }
