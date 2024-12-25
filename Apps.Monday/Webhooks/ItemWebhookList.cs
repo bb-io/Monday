@@ -21,7 +21,12 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
         Description = "This event is triggered when item is created.")]
     public Task<WebhookResponse<ItemResponse>> OnItemCreated(WebhookRequest request) 
         => HandleWebhookRequest(request);
-
+    
+    [Webhook("On item changed", typeof(ItemChangedHandler), 
+        Description = "This event is triggered when item is changed.")]
+    public Task<WebhookResponse<ItemResponse>> OnItemChanged(WebhookRequest request) 
+        => HandleWebhookRequest(request);
+    
     [Webhook("On item archived", typeof(ItemArchivedHandler),
         Description = "This event is triggered when an item is archived.")]
     public Task<WebhookResponse<ItemIdResponse>> OnItemArchived(WebhookRequest request)
@@ -48,7 +53,7 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
             };
         }
 
-        var itemPayload = JsonConvert.DeserializeObject<EventPayload<ItemPayload>>(body)!;
+        var itemPayload = JsonConvert.DeserializeObject<EventPayload<Payload>>(body)!;
         var item = await GetItem(itemPayload.Event.PulseId);
         return new WebhookResponse<ItemResponse>
         {
@@ -76,13 +81,13 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
             });
         }
 
-        var itemPayload = JsonConvert.DeserializeObject<EventPayload<ItemPayload>>(body)!;
+        var itemPayload = JsonConvert.DeserializeObject<EventPayload<Payload>>(body)!;
         return Task.FromResult(new WebhookResponse<ItemIdResponse>
         {
             ReceivedWebhookRequestType = WebhookRequestType.Default,
             Result = new()
             {
-                ItemId = itemPayload.Event.PulseId
+                ItemId = body
             }
         });
     }
