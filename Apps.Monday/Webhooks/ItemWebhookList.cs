@@ -54,7 +54,7 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
         }
 
         var itemPayload = JsonConvert.DeserializeObject<EventPayload<Payload>>(body)!;
-        var item = await GetItem(itemPayload.Event.PulseId);
+        var item = await GetItemAsync(itemPayload.Event.PulseId);
         return new WebhookResponse<ItemResponse>
         {
             ReceivedWebhookRequestType = WebhookRequestType.Default,
@@ -81,18 +81,18 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
             });
         }
 
-        var itemPayload = JsonConvert.DeserializeObject<EventPayload<Payload>>(body)!;
+        var itemPayload = JsonConvert.DeserializeObject<EventPayload<DeleteItemPayload>>(body)!;
         return Task.FromResult(new WebhookResponse<ItemIdResponse>
         {
             ReceivedWebhookRequestType = WebhookRequestType.Default,
             Result = new()
             {
-                ItemId = body
+                ItemId = itemPayload.Event.ItemId!
             }
         });
     }
 
-    private async Task<ItemResponse> GetItem(string itemId)
+    private async Task<ItemResponse> GetItemAsync(string itemId)
     {
         var variables = new { ids = int.Parse(itemId) };
         var request = new ApiRequest(GraphQlQueries.GetItemById, variables, Creds);
