@@ -2,6 +2,7 @@
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
 using Blackbird.Applications.Sdk.Utils.RestSharp;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace Apps.Monday.Api;
@@ -17,6 +18,14 @@ public class ApiRequest : BlackBirdRestRequest
         : base(string.Empty, Method.Post, creds)
     {
         this.AddBody(new { query, variables });
+    }
+    
+    public ApiRequest(string endpoint, string query, object variables, object map, IEnumerable<AuthenticationCredentialsProvider> creds)
+        : base(endpoint, Method.Post, creds)
+    {
+        this.AddParameter("query", query);
+        this.AddParameter("variables", JsonConvert.SerializeObject(variables));
+        this.AddParameter("map", JsonConvert.SerializeObject(map));
     }
     
     protected override void AddAuth(IEnumerable<AuthenticationCredentialsProvider> creds)

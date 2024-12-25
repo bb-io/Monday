@@ -92,8 +92,6 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
         return response.Data.CreateItem;
     }
     
-    // TODO: Update item, Add update to item, Add attachment to item + Events
-    
     [Action("Delete item", Description = "Deletes an item based on specified ID")]
     public async Task DeleteItemAsync([ActionParameter] ItemIdentifier itemIdentifier)
     {

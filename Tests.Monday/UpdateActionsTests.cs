@@ -12,7 +12,7 @@ public class UpdateActionsTests : TestBase
     [TestMethod]
     public async Task GetUpdate_ExistingUpdate_ShouldReturnAnUpdate()
     {
-        var updateActions = new UpdateActions(InvocationContext);
+        var updateActions = new UpdateActions(InvocationContext, FileManager);
         var update = await updateActions.GetUpdateAsync(new()
         {
             ItemId = ItemId,
@@ -28,7 +28,7 @@ public class UpdateActionsTests : TestBase
     [TestMethod]
     public async Task GetUpdate_InvalidId_ShouldThrowException()
     {
-        var updateActions = new UpdateActions(InvocationContext);
+        var updateActions = new UpdateActions(InvocationContext, FileManager);
 
         await Assert.ThrowsExceptionAsync<PluginApplicationException>(async () =>
         {
@@ -43,7 +43,7 @@ public class UpdateActionsTests : TestBase
     [TestMethod]
     public async Task CreateAndDeleteUpdate_ValidData_ShouldNotThrowException()
     {
-        var updateActions = new UpdateActions(InvocationContext);
+        var updateActions = new UpdateActions(InvocationContext, FileManager);
 
         var createdUpdate = await updateActions.AddUpdateAsync(new()
         {
@@ -70,7 +70,7 @@ public class UpdateActionsTests : TestBase
     [TestMethod]
     public async Task EditUpdate_ValidData_ShouldNotThrowException()
     {
-        var updateActions = new UpdateActions(InvocationContext);
+        var updateActions = new UpdateActions(InvocationContext, FileManager);
 
         var createdUpdate = await updateActions.EditUpdateAsync(new()
         {
@@ -84,5 +84,29 @@ public class UpdateActionsTests : TestBase
         createdUpdate.Id.Should().NotBeNullOrEmpty();
 
         Console.WriteLine(JsonConvert.SerializeObject(createdUpdate, Formatting.Indented));
+    }
+    
+    [TestMethod]
+    public async Task AddAttachmentToUpdate_ValidData_ShouldNotThrowException()
+    {
+        var updateActions = new UpdateActions(InvocationContext, FileManager);
+
+        var update = await updateActions.AddAttachmentAsync(new()
+        {
+            ItemId = ItemId,
+            UpdateId = UpdateId,
+            File = new()
+            {
+                Name = "test.docx",
+                ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            }
+        });
+        
+        
+        update.Should().NotBeNull();
+        update.Id.Should().NotBeNullOrEmpty();
+        update.Assets.Should().NotBeEmpty();
+
+        Console.WriteLine(JsonConvert.SerializeObject(update, Formatting.Indented));
     }
 }

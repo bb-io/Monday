@@ -58,6 +58,14 @@ public static class GraphQlMutations
             }
         }
     }";
+
+    public const string AddAttachmentToUpdate = @"mutation($update_id: ID!, $file: File!) { 
+        add_file_to_update (update_id: $update_id, file: $file) {
+            id
+            name
+            file_extension
+        }
+    }";
     
     public const string DeleteUpdate = @"mutation($id: ID!) {
         delete_update (id: $id) {
