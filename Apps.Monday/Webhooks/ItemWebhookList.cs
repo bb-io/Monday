@@ -48,7 +48,7 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
             };
         }
 
-        var itemPayload = JsonConvert.DeserializeObject<EventPayload<ItemPayload>>(body, JsonConfig.JsonSettings)!;
+        var itemPayload = JsonConvert.DeserializeObject<EventPayload<ItemPayload>>(body)!;
         var item = await GetItem(itemPayload.Event.PulseId);
         return new WebhookResponse<ItemResponse>
         {
@@ -76,7 +76,7 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
             });
         }
 
-        var itemPayload = JsonConvert.DeserializeObject<EventPayload<ItemPayload>>(body, JsonConfig.JsonSettings)!;
+        var itemPayload = JsonConvert.DeserializeObject<EventPayload<ItemPayload>>(body)!;
         return Task.FromResult(new WebhookResponse<ItemIdResponse>
         {
             ReceivedWebhookRequestType = WebhookRequestType.Default,
