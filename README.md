@@ -70,12 +70,6 @@ If you are a member or admin of a Monday.com account, follow these steps to acce
 - **On update created**: This event is triggered when an update is created.
 - **On update edited**: This event is triggered when an update is edited.
 
-> Currently, we do not have logic implemented for webhook unsubscribing. This means that if you suspend or delete a bird, Monday.com will continue sending webhook (notification) requests. Although these requests will not appear in our UI, they will respond to Monday.com with a 404 status code.
-
-> Unsubscribing from webhooks is not a straightforward operation using the Monday API. However, we are considering adding this functionality in the future.
-
-> In the meantime, you can manually delete webhooks directly from the Monday.com UI by following these steps: 1. Open the board where the webhook is set up. 2. Click on Integrate in the top-right corner. 3. Navigate to the Board Automations tab. 4. Click the three dots on the right side of the specific webhook. 5. Select Delete to remove the webhook. Once a webhook is deleted, we will no longer receive notification requests from Monday.com.
-
 ## Feedback
 
 Do you want to use this app or do you have feedback on our implementation? Reach out to us using the [established channels](https://www.blackbird.io/) or create an issue.

@@ -68,7 +68,7 @@ public abstract class BaseWebhookHandler(
             var request = new ApiRequest(GraphQlMutations.DeleteWebhook, variables, Creds);
             await Client.ExecuteWithErrorHandling(request);
 
-            var bridgeDeleteRequest = new RestRequest($"/{encodedPayload}", Method.Delete)
+            var bridgeDeleteRequest = new RestRequest($"/payload?{encodedPayload}", Method.Delete)
                 .AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdToken);
             await bridgeClient.ExecuteAsync(bridgeDeleteRequest);
         }
