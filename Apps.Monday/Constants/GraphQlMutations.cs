@@ -91,4 +91,10 @@ public static class GraphQlMutations
             board_id
         }
     }";
+    
+    public const string DeleteWebhook = @"mutation($id: ID!) {
+        delete_webhook (id: $id) {
+            id 
+        }
+    }";
 }
