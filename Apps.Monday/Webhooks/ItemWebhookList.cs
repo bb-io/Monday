@@ -18,22 +18,22 @@ namespace Apps.Monday.Webhooks;
 public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable(invocationContext)
 {
     [Webhook("On item created", typeof(ItemCreatedHandler), 
-        Description = "This event is triggered when item is created.")]
+        Description = "This event is triggered when an item is created")]
     public Task<WebhookResponse<ItemResponse>> OnItemCreated(WebhookRequest request) 
         => HandleWebhookRequest(request);
     
     [Webhook("On item changed", typeof(ItemChangedHandler), 
-        Description = "This event is triggered when item is changed.")]
+        Description = "This event is triggered when an item is changed")]
     public Task<WebhookResponse<ItemResponse>> OnItemChanged(WebhookRequest request) 
         => HandleWebhookRequest(request);
     
     [Webhook("On item archived", typeof(ItemArchivedHandler),
-        Description = "This event is triggered when an item is archived.")]
+        Description = "This event is triggered when an item is archived")]
     public Task<WebhookResponse<ItemIdResponse>> OnItemArchived(WebhookRequest request)
         => HandleArchivedOrDeletedRequest(request);
 
     [Webhook("On item deleted", typeof(ItemDeletedHandler),
-        Description = "This event is triggered when an item is deleted.")]
+        Description = "This event is triggered when an item is deleted")]
     public Task<WebhookResponse<ItemIdResponse>> OnItemDeleted(WebhookRequest request)
         => HandleArchivedOrDeletedRequest(request);
     
@@ -100,7 +100,7 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SearchItemsResponse>>(request);
         if (response?.Data == null || !response.Data.Items.Any())
         {
-            throw new PluginApplicationException($"Couldn't find board by specified ID ({itemId})");
+            throw new PluginApplicationException($"Unable to find an item with the specified ID ({itemId})");
         }
 
         return response.Data.Items.First();

@@ -16,7 +16,7 @@ namespace Apps.Monday.Actions;
 [ActionList]
 public class BoardActions(InvocationContext invocationContext) : AppInvocable(invocationContext)
 {
-    [Action("Search boards", Description = "Retrieves all board filtered by specified parameters")]
+    [Action("Search boards", Description = "Retrieves all boards filtered by the specified parameters")]
     public async Task<SearchBoardsResponse> SearchBoardsAsync([ActionParameter] SearchBoardRequest searchBoardRequest)
     {
         return await Client.PaginateAsync<SearchBoardsResponse, BoardResponse>(
@@ -25,7 +25,7 @@ public class BoardActions(InvocationContext invocationContext) : AppInvocable(in
         );
     }
 
-    [Action("Get board", Description = "Get board by specified ID")]
+    [Action("Get board", Description = "Retrieves a board by its specified ID")]
     public async Task<BoardResponse> GetBoardAsync([ActionParameter] BoardIdentifier boardIdentifier)
     {
         var variables = new { ids = int.Parse(boardIdentifier.BoardId) };
@@ -34,7 +34,7 @@ public class BoardActions(InvocationContext invocationContext) : AppInvocable(in
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SearchBoardsResponse>>(request);
         if (response?.Data == null || !response.Data.Items.Any())
         {
-            throw new PluginApplicationException("Couldn't find board by specified ID");
+            throw new PluginApplicationException($"Unable to find a board with the specified ID ({boardIdentifier.BoardId})");
         }
 
         return response.Data.Items.First();

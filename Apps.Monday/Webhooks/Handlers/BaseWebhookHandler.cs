@@ -32,6 +32,7 @@ public abstract class BaseWebhookHandler(
     public Task UnsubscribeAsync(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProvider,
         Dictionary<string, string> values)
     {
-        throw new NotImplementedException();
+        // Users can delete the subscription in the UI, so this is ignored
+        return Task.CompletedTask;
     }
 }

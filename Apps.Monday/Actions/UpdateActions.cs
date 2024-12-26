@@ -18,7 +18,7 @@ namespace Apps.Monday.Actions;
 [ActionList]
 public class UpdateActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : AppInvocable(invocationContext)
 {
-    [Action("Get update", Description = "Get update based on Item ID")] 
+    [Action("Get update", Description = "Retrieves an update based on the specified Item ID")] 
     public async Task<UpdateResponse> GetUpdateAsync([ActionParameter] UpdateIdentifier updateIdentifier)
     {
         var itemActions = new ItemActions(InvocationContext);
@@ -26,12 +26,12 @@ public class UpdateActions(InvocationContext invocationContext, IFileManagementC
 
         var specificUpdate = item.Updates.FirstOrDefault(x => x.Id == updateIdentifier.UpdateId)
                              ?? throw new PluginApplicationException(
-                                 $"Couldn't find update based on specified ID ({updateIdentifier.UpdateId}) in item with {updateIdentifier.ItemId} ID");
+                                 $"Unable to find an update with the specified ID ({updateIdentifier.UpdateId}) in the item with ID {updateIdentifier.ItemId}");
 
         return specificUpdate;
     }
     
-    [Action("Add update", Description = "Create update (comment) in specific item based on ID")]
+    [Action("Add update", Description = "Creates an update (comment) in a specific item based on its ID")]
     public async Task<UpdateResponse> AddUpdateAsync([ActionParameter] CreateUpdateRequest createUpdateRequest)
     {
         var variables = new
@@ -45,7 +45,7 @@ public class UpdateActions(InvocationContext invocationContext, IFileManagementC
         return response.Data.CreateUpdate;
     }
     
-    [Action("Add attachment to update", Description = "Add attachment (file) to update based on specified ID")]
+    [Action("Add attachment to update", Description = "Adds an attachment (file) to an update based on the specified ID")]
     public async Task<UpdateResponse> AddAttachmentAsync([ActionParameter] AddAttachmentRequest addAttachmentRequest)
     {
         var variables = new
@@ -68,7 +68,7 @@ public class UpdateActions(InvocationContext invocationContext, IFileManagementC
         return await GetUpdateAsync(addAttachmentRequest);
     }
     
-    [Action("Edit update", Description = "Edit an update (comment) based on specified ID")]
+    [Action("Edit update", Description = "Edits an update (comment) based on the specified ID")]
     public async Task<UpdateResponse> EditUpdateAsync([ActionParameter] EditUpdateRequest createUpdateRequest)
     {
         var variables = new
@@ -82,7 +82,7 @@ public class UpdateActions(InvocationContext invocationContext, IFileManagementC
         return response.Data.EditUpdate;
     }
     
-    [Action("Delete update", Description = "Delete an update (comment) based on specified ID")]
+    [Action("Delete update", Description = "Deletes an update (comment) based on the specified ID")]
     public async Task DeleteUpdateAsync([ActionParameter] UpdateIdentifier createUpdateRequest)
     {
         var variables = new

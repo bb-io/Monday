@@ -18,12 +18,12 @@ namespace Apps.Monday.Webhooks;
 public class UpdateWebhookList(InvocationContext invocationContext) : AppInvocable(invocationContext)
 {
     [Webhook("On update created", typeof(UpdateCreatedHandler), 
-        Description = "This event is triggered when update is created.")]
+        Description = "This event is triggered when an update is created")]
     public Task<WebhookResponse<UpdateResponse>> OnUpdateCreated(WebhookRequest request) 
         => HandleWebhookRequest(request);
 
     [Webhook("On update edited", typeof(UpdateEditedHandler), 
-        Description = "This event is triggered when update is edited.")]
+        Description = "This event is triggered when an update is edited")]
     public Task<WebhookResponse<UpdateResponse>> OnUpdateEdited(WebhookRequest request) 
         => HandleWebhookRequest(request);
 
@@ -58,7 +58,7 @@ public class UpdateWebhookList(InvocationContext invocationContext) : AppInvocab
 
         var specificUpdate = item.Updates.FirstOrDefault(x => x.Id == updateId)
                              ?? throw new PluginApplicationException(
-                                 $"Couldn't find update based on specified ID ({updateId}) in item with {item} ID");
+                                 $"Unable to find an update with the specified ID ({updateId}) in the item with ID {item}");
 
         return specificUpdate;
     }
@@ -71,7 +71,7 @@ public class UpdateWebhookList(InvocationContext invocationContext) : AppInvocab
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SearchItemsResponse>>(request);
         if (response?.Data == null || !response.Data.Items.Any())
         {
-            throw new PluginApplicationException($"Couldn't find board by specified ID ({itemId})");
+            throw new PluginApplicationException($"Unable to find an item with the specified ID ({itemId})");
         }
 
         return response.Data.Items.First();
