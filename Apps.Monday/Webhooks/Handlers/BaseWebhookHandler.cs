@@ -59,9 +59,10 @@ public abstract class BaseWebhookHandler(
         if (response.IsSuccessStatusCode)
         {
             var webhookId = response.Content!;
+            var rawId = webhookId.Trim('"');
             var variables = new
             {
-                id = int.Parse(webhookId)
+                id = int.Parse(rawId)
             };
 
             var request = new ApiRequest(GraphQlMutations.DeleteWebhook, variables, Creds);
