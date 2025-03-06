@@ -33,4 +33,18 @@ public class ItemResponse
     public List<UpdateResponse> Updates { get; set; } = new();
 
     public List<AssetResponse> Assets { get; set; } = new();
+
+    [DefinitionIgnore]
+    public List<ColumnValueResponse> ColumnValues { get; set; } = new();
+
+    [Display("Status")]
+    public string Status => ColumnValues.FirstOrDefault(cv => cv.Id.Equals("status", StringComparison.OrdinalIgnoreCase))?.Text ?? string.Empty;
+}
+public class ColumnValueResponse
+{
+    [Display("Column ID")]
+    public string Id { get; set; } = string.Empty;
+
+    [Display("Text")]
+    public string Text { get; set; } = string.Empty;
 }
