@@ -101,6 +101,10 @@ public static class GraphQlQueries
                 email          
                 url
                 relative_link
+                column_values {
+                id
+                text
+                }
                 updates {
                     id
                     text_body

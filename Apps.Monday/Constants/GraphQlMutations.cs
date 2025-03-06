@@ -97,4 +97,41 @@ public static class GraphQlMutations
             id 
         }
     }";
+
+    public const string UpdateItemField = @"mutation($board_id: ID!, $item_id: ID!, $column_id: String!, $value: JSON!) {
+    change_column_value(board_id: $board_id, item_id: $item_id, column_id: $column_id, value: $value) {
+        id
+        name
+        created_at
+        updated_at      
+        email          
+        url
+        relative_link
+        column_values {
+            id
+            text
+        }
+        updates {
+            id
+            text_body
+            edited_at
+            assets {
+                id
+                name
+                file_extension
+            }
+        }
+        assets {
+            id
+            name
+            file_extension
+        }
+        board {
+            id,
+            name
+        }
+    }
+}";
+
+
 }

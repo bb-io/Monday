@@ -115,4 +115,47 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
         var request = new ApiRequest(GraphQlMutations.ArchiveItem, variables, Creds);
         await Client.ExecuteWithErrorHandling(request);
     }
+
+
+
+    [Action("Update item", Description = "Updates a custom field for an item")]
+    public async Task<ItemResponse> UpdateItemAsync([ActionParameter] UpdateItemRequest request)
+    {
+        string valueJson = TransformCustomFieldValue(request.ColumnId, request.Value);
+
+        var variables = new
+        {
+            board_id = request.BoardId,
+            item_id = request.ItemId,
+            column_id = request.ColumnId,
+            value = valueJson
+        };
+
+        var apiRequest = new ApiRequest(GraphQlMutations.UpdateItemField, variables, Creds);
+        var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SearchItemsResponse>>(apiRequest);
+
+        if (response?.Data == null || !response.Data.Items.Any())
+        {
+            return await GetItemAsync(new ItemIdentifier
+            {
+                BoardId = request.BoardId,
+                ItemId = request.ItemId
+            });
+        }
+
+        return response.Data.Items.First();
+    }
+
+
+    private string TransformCustomFieldValue(string columnId, string value)
+    {
+        if (columnId.Equals("status", StringComparison.OrdinalIgnoreCase))
+        {
+            return JsonConvert.SerializeObject(new { label = value });
+        }
+        else
+        {
+            return JsonConvert.SerializeObject(new { text = value });
+        }
+    }
 }
