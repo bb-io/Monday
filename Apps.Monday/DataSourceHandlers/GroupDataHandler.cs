@@ -23,7 +23,7 @@ public class GroupDataHandler(
             throw new Exception("Please provide Board ID first");
         }
 
-        var variables = new { ids = int.Parse(boardIdentifier.BoardId) };
+        var variables = new { ids = long.Parse(boardIdentifier.BoardId) };
         var request = new ApiRequest(GraphQlQueries.GetBoardGroups, variables, Creds);
 
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SearchBoardsResponse>>(request);
