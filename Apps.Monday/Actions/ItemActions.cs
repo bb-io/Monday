@@ -21,7 +21,7 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     [Action("Search items", Description = "Retrieves all items from a specific board")]
     public async Task<SearchItemsResponse> SearchItemsAsync([ActionParameter] BoardIdentifier boardIdentifier)
     {
-        var variables = new { ids = int.Parse(boardIdentifier.BoardId) };
+        var variables = new { ids = long.Parse(boardIdentifier.BoardId) };
         var request = new ApiRequest(GraphQlQueries.GetBoardWithItemsById, variables, Creds);
 
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<BoardItemsResponse>>(request);
@@ -41,7 +41,7 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     [Action("Get item", Description = "Retrieves an item by its specified ID")]
     public async Task<ItemResponse> GetItemAsync([ActionParameter] ItemIdentifier itemIdentifier)
     {
-        var variables = new { ids = int.Parse(itemIdentifier.ItemId) };
+        var variables = new { ids = long.Parse(itemIdentifier.ItemId) };
         var request = new ApiRequest(GraphQlQueries.GetItemById, variables, Creds);
 
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SearchItemsResponse>>(request);
@@ -97,7 +97,7 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     {
         var variables = new
         {
-            item_id = int.Parse(itemIdentifier.ItemId)
+            item_id = long.Parse(itemIdentifier.ItemId)
         };
         
         var request = new ApiRequest(GraphQlMutations.DeleteItem, variables, Creds);
@@ -109,14 +109,12 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     {
         var variables = new
         {
-            item_id = int.Parse(itemIdentifier.ItemId)
+            item_id = long.Parse(itemIdentifier.ItemId)
         };
         
         var request = new ApiRequest(GraphQlMutations.ArchiveItem, variables, Creds);
         await Client.ExecuteWithErrorHandling(request);
     }
-
-
 
     [Action("Update item", Description = "Updates a custom field for an item")]
     public async Task<ItemResponse> UpdateItemAsync([ActionParameter] UpdateItemRequest request)

@@ -47,6 +47,7 @@ If you are a member or admin of a Monday.com account, follow these steps to acce
 - **Create item**: Creates an item with the specified parameters.
 - **Delete item**: Deletes an item by its specified ID.
 - **Archive item**: Archives an item by its specified ID.
+- **Update item**: Updates an item by its specified ID.
 
 ### Updates
 

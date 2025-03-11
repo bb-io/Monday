@@ -28,7 +28,7 @@ public class BoardActions(InvocationContext invocationContext) : AppInvocable(in
     [Action("Get board", Description = "Retrieves a board by its specified ID")]
     public async Task<BoardResponse> GetBoardAsync([ActionParameter] BoardIdentifier boardIdentifier)
     {
-        var variables = new { ids = int.Parse(boardIdentifier.BoardId) };
+        var variables = new { ids = long.Parse(boardIdentifier.BoardId) };
         var request = new ApiRequest(GraphQlQueries.GetBoardById, variables, Creds);
             
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SearchBoardsResponse>>(request);
