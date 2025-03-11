@@ -116,8 +116,6 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
         await Client.ExecuteWithErrorHandling(request);
     }
 
-
-
     [Action("Update item", Description = "Updates a custom field for an item")]
     public async Task<ItemResponse> UpdateItemAsync([ActionParameter] UpdateItemRequest request)
     {
