@@ -1,21 +1,17 @@
-﻿using Apps.Monday.DataSourceHandlers;
+using Blackbird.Applications.Sdk.Common.Dynamic;
 using FluentAssertions;
-using Tests.Monday.Base;
 
-namespace Tests.Monday;
+namespace Tests.Monday.Base;
 
-[TestClass]
-public class ColumnDataHandlerTests : TestBase
+public abstract class DataHandlerTestBase<T> : TestBase where T : IAsyncDataSourceItemHandler
 {
+    protected abstract T CreateHandler();
+    
     [TestMethod]
     public async Task GetDataAsync_WithoutFilters_ShouldReturnNotEmptyCollection()
     {
-        var columnDataHandler = new ColumnDataHandler(InvocationContext, new()
-        {
-            BoardId = BoardId
-        });
-        
-        var dataSourceItems = await columnDataHandler.GetDataAsync(new(), default);
+        var handler = CreateHandler();
+        var dataSourceItems = await handler.GetDataAsync(new(), default);
         var sourceItems = dataSourceItems.ToList();
         
         sourceItems.Should().NotBeEmpty();
@@ -26,13 +22,10 @@ public class ColumnDataHandlerTests : TestBase
     [TestMethod]
     public async Task GetDataAsync_WithSearchString_ShouldReturnNotEmptyCollection()
     {
-        var searchString = "Date";
+        var searchString = GetSearchString();
         
-        var columnDataHandler = new ColumnDataHandler(InvocationContext, new()
-        {
-            BoardId = BoardId
-        });
-        var dataSourceItems = await columnDataHandler.GetDataAsync(new()
+        var handler = CreateHandler();
+        var dataSourceItems = await handler.GetDataAsync(new()
         {
             SearchString = searchString
         }, default);
@@ -44,4 +37,6 @@ public class ColumnDataHandlerTests : TestBase
         Console.WriteLine(sourceItems.Count);
         sourceItems.ForEach(x => Console.WriteLine($"{x.Value}: {x.DisplayName}"));
     }
+
+    protected abstract string GetSearchString();
 }

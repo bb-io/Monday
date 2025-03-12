@@ -48,6 +48,7 @@ If you are a member or admin of a Monday.com account, follow these steps to acce
 - **Delete item**: Deletes an item by its specified ID.
 - **Archive item**: Archives an item by its specified ID.
 - **Update item**: Updates an item by its specified ID.
+- **Assign person to item**: Assigns a person to the specified item.
 
 ### Updates
 

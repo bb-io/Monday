@@ -24,7 +24,7 @@ public class UpdateActionsTests : TestBase
 
         Console.WriteLine(JsonConvert.SerializeObject(update, Formatting.Indented));
     }
-    
+
     [TestMethod]
     public async Task GetUpdate_InvalidId_ShouldThrowException()
     {
@@ -39,7 +39,7 @@ public class UpdateActionsTests : TestBase
             });
         });
     }
-    
+
     [TestMethod]
     public async Task CreateAndDeleteUpdate_ValidData_ShouldNotThrowException()
     {
@@ -50,8 +50,8 @@ public class UpdateActionsTests : TestBase
             ItemId = ItemId,
             Body = $"Tests.Monday {DateTime.Now:G}"
         });
-        
-        
+
+
         createdUpdate.Should().NotBeNull();
         createdUpdate.Id.Should().NotBeNullOrEmpty();
 
@@ -62,11 +62,11 @@ public class UpdateActionsTests : TestBase
             ItemId = ItemId,
             UpdateId = createdUpdate.Id
         });
-        
+
         Console.WriteLine("\nSuccessfully deleted newly created update");
     }
-    
-        
+
+
     [TestMethod]
     public async Task EditUpdate_ValidData_ShouldNotThrowException()
     {
@@ -78,16 +78,39 @@ public class UpdateActionsTests : TestBase
             UpdateId = UpdateId,
             Body = $"Tests.Monday updated {DateTime.Now:G}"
         });
-        
-        
+
+
         createdUpdate.Should().NotBeNull();
         createdUpdate.Id.Should().NotBeNullOrEmpty();
 
         Console.WriteLine(JsonConvert.SerializeObject(createdUpdate, Formatting.Indented));
     }
-    
+
     [TestMethod]
     public async Task AddAttachmentToUpdate_ValidData_ShouldNotThrowException()
+    {
+        var updateActions = new UpdateActions(InvocationContext, FileManager);
+
+        var update = await updateActions.AddAttachmentAsync(new()
+        {
+            ItemId = "1753020445",
+            File = new()
+            {
+                Name = "test.docx",
+                ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            }
+        });
+
+
+        update.Should().NotBeNull();
+        update.Id.Should().NotBeNullOrEmpty();
+        update.Assets.Should().NotBeEmpty();
+
+        Console.WriteLine(JsonConvert.SerializeObject(update, Formatting.Indented));
+    }
+
+    [TestMethod]
+    public async Task AddAttachmentToUpdate_WithUpdateId_ShouldNotThrowException()
     {
         var updateActions = new UpdateActions(InvocationContext, FileManager);
 
@@ -101,8 +124,7 @@ public class UpdateActionsTests : TestBase
                 ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             }
         });
-        
-        
+
         update.Should().NotBeNull();
         update.Id.Should().NotBeNullOrEmpty();
         update.Assets.Should().NotBeEmpty();

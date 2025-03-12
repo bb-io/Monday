@@ -144,16 +144,52 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
         return response.Data.Items.First();
     }
 
+    [Action("Assign person to item", Description = "Assigns a person to the specified item")]
+    public async Task<ItemResponse> AssignPersonToItemAsync([ActionParameter] AssignItemPersonRequest request)
+    {
+        var valueJson = JsonConvert.SerializeObject(new
+        {
+            personsAndTeams = new[]
+            {
+                new
+                {
+                    id = long.Parse(request.PersonId),
+                    kind = "person"
+                }
+            }
+        });
+
+        var variables = new
+        {
+            board_id = long.Parse(request.BoardId),
+            item_id = long.Parse(request.ItemId),
+            column_id = request.ColumnId,
+            value = valueJson
+        };
+
+        var apiRequest = new ApiRequest(GraphQlMutations.UpdateItemField, variables, Creds);
+        var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<ChangeColumnValueDto>>(apiRequest);
+
+        if (response?.Data == null || string.IsNullOrEmpty(response.Data.ChangeColumnValue.Id))
+        {
+            throw new PluginApplicationException($"Unable to assign person to item with ID {request.ItemId}");
+        }
+
+        return response.Data.ChangeColumnValue;
+    }
 
     private string TransformCustomFieldValue(string columnId, string value)
     {
-        if (columnId.Equals("status", StringComparison.OrdinalIgnoreCase))
+        var transformations = new Dictionary<string, Func<string, string>>(StringComparer.OrdinalIgnoreCase)
         {
-            return JsonConvert.SerializeObject(new { label = value });
-        }
-        else
+            { "status", v => JsonConvert.SerializeObject(new { label = v }) }
+        };
+
+        if (transformations.TryGetValue(columnId, out var transform))
         {
-            return JsonConvert.SerializeObject(new { text = value });
+            return transform(value);
         }
+
+        return JsonConvert.SerializeObject(new { text = value });
     }
 }

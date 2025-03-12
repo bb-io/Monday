@@ -45,12 +45,23 @@ public class UpdateActions(InvocationContext invocationContext, IFileManagementC
         return response.Data.CreateUpdate;
     }
     
-    [Action("Add attachment to update", Description = "Adds an attachment (file) to an update based on the specified ID")]
+    [Action("Add attachment", Description = "Adds an attachment (file) to an item, optionally to a specific update")]
     public async Task<UpdateResponse> AddAttachmentAsync([ActionParameter] AddAttachmentRequest addAttachmentRequest)
     {
+        var updateId = addAttachmentRequest.UpdateId;
+        if (string.IsNullOrEmpty(updateId))
+        {
+            var createResponse = await AddUpdateAsync(new CreateUpdateRequest 
+            { 
+                ItemId = addAttachmentRequest.ItemId,
+                Body = $"File uploaded: {addAttachmentRequest.File.Name}"
+            });
+            updateId = createResponse.Id;
+        }
+
         var variables = new
         {
-            update_id = addAttachmentRequest.UpdateId
+            update_id = updateId
         };
 
         var map = new
@@ -61,11 +72,11 @@ public class UpdateActions(InvocationContext invocationContext, IFileManagementC
         var stream = await fileManagementClient.DownloadAsync(addAttachmentRequest.File);
         var bytes = await stream.GetByteData();
 
-        var request = new ApiRequest("/file",GraphQlMutations.AddAttachmentToUpdate, variables, map, Creds)
+        var request = new ApiRequest("/file", GraphQlMutations.AddAttachmentToUpdate, variables, map, Creds)
             .AddFile("file", bytes, addAttachmentRequest.File.Name);
         
         await Client.ExecuteWithErrorHandling<DataWrapperDto<AddFileToUpdateResponse>>(request);
-        return await GetUpdateAsync(addAttachmentRequest);
+        return await GetUpdateAsync(new UpdateIdentifier { ItemId = addAttachmentRequest.ItemId, UpdateId = updateId });
     }
     
     [Action("Edit update", Description = "Edits an update (comment) based on the specified ID")]
