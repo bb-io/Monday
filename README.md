@@ -54,7 +54,7 @@ If you are a member or admin of a Monday.com account, follow these steps to acce
 
 - **Get update**: Retrieves an update based on the specified Item ID.
 - **Add update**: Creates an update (comment) in a specific item based on its ID.
-- **Add attachment to update**: Adds an attachment (file) to an update based on the specified ID.
+- **Add attachment**: Adds an attachment (file) to an item, optionally to a specific update
 - **Edit update**: Edits an update (comment) based on the specified ID.
 - **Delete update**: Deletes an update (comment) based on the specified ID.
 
