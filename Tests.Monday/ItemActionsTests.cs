@@ -129,4 +129,24 @@ public class ItemActionsTests : TestBase
 
         Console.WriteLine("Updated Item:\n" + JsonConvert.SerializeObject(updateResponse, Formatting.Indented));
     }
+
+    [TestMethod]
+    public async Task AssignPersonToItem_WithValidData_ShouldAssignPerson()
+    {
+        var actions = new ItemActions(InvocationContext);
+
+        var assignRequest = new AssignItemPersonRequest
+        {
+            BoardId = "1753020434",
+            ItemId = "1755162632",
+            ColumnId = "person",
+            PersonId = "69964137"
+        };
+
+        var response = await actions.AssignPersonToItemAsync(assignRequest);
+        response.Should().NotBeNull();
+        response.Id.Should().Be("1755162632");
+
+        Console.WriteLine("Assigned Person to Item:\n" + JsonConvert.SerializeObject(response, Formatting.Indented));
+    }
 }

@@ -127,4 +127,13 @@ public static class GraphQlQueries
             }
         }
     ";
+
+    public const string GetUsers = @"
+        query {
+            users {
+                id
+                name
+            }
+        }
+    ";
 }
