@@ -15,6 +15,8 @@ public class ColumnDataHandler(
     InvocationContext invocationContext,
     [ActionParameter] BoardIdentifier boardIdentifier) : AppInvocable(invocationContext), IAsyncDataSourceItemHandler
 {
+    protected virtual List<string>? ColumnTypes { get; }
+
     public async Task<IEnumerable<DataSourceItem>> GetDataAsync(DataSourceContext context,
         CancellationToken cancellationToken)
     {
@@ -35,6 +37,7 @@ public class ColumnDataHandler(
         return response.Data.Items.First()
             .Columns
             .Where(x => string.IsNullOrEmpty(context.SearchString) || x.Title.Contains(context.SearchString, StringComparison.OrdinalIgnoreCase))
+            .Where(x => ColumnTypes == null || ColumnTypes.Contains(x.Type))
             .Select(x => new DataSourceItem(x.Id, $"[{x.Type}] {x.Title}"));
     }
 }

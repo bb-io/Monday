@@ -7,7 +7,7 @@ namespace Apps.Monday.Models.Requests;
 
 public class AssignItemPersonRequest : ItemIdentifier
 {
-    [Display("Column ID"), DataSource(typeof(ColumnDataHandler))]
+    [Display("Column ID"), DataSource(typeof(PersonColumnDataHandler))]
     public string ColumnId { get; set; } = string.Empty;
 
     [Display("Person ID"), DataSource(typeof(UserDataHandler))]
