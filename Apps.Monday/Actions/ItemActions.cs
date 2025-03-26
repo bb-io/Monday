@@ -180,14 +180,19 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
 
     private string TransformCustomFieldValue(string columnId, string value)
     {
-        var transformations = new Dictionary<string, Func<string, string>>(StringComparer.OrdinalIgnoreCase)
+        if (columnId.StartsWith("status", StringComparison.OrdinalIgnoreCase))
         {
-            { "status", v => JsonConvert.SerializeObject(new { label = v }) }
-        };
+            return JsonConvert.SerializeObject(new { label = value });
+        }
 
-        if (transformations.TryGetValue(columnId, out var transform))
+        if (columnId.StartsWith("dropdown", StringComparison.OrdinalIgnoreCase))
         {
-            return transform(value);
+            return JsonConvert.SerializeObject(new { labels = new string[] { value } });
+        }
+
+        if (columnId.StartsWith("name", StringComparison.OrdinalIgnoreCase))
+        {
+            return JsonConvert.SerializeObject($"{value}");
         }
 
         return JsonConvert.SerializeObject(new { text = value });

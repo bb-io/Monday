@@ -32,7 +32,7 @@ public class ItemActionsTests : TestBase
         var response = await actions.GetItemAsync(new()
         {
             BoardId = BoardId,
-            ItemId = ItemId
+            ItemId = "1753020441"
         });
 
         response.Id.Should().NotBeEmpty();
@@ -117,15 +117,15 @@ public class ItemActionsTests : TestBase
 
         var updateRequest = new UpdateItemRequest
         {
-            BoardId = BoardId,
-            ItemId = ItemId,
-            ColumnId = "status",               
-            Value = "Working on it"      
+            BoardId = "1753020434",
+            ItemId = "1753020441",
+            ColumnId = "dropdown_mkpd70c6",               
+            Value = "New"
         };
 
         var updateResponse = await actions.UpdateItemAsync(updateRequest);
         updateResponse.Should().NotBeNull();
-        updateResponse.Id.Should().Be(ItemId);
+        updateResponse.Id.Should().Be("1753020441");
 
         Console.WriteLine("Updated Item:\n" + JsonConvert.SerializeObject(updateResponse, Formatting.Indented));
     }
