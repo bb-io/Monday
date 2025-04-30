@@ -10,6 +10,7 @@ using Apps.Monday.Webhooks.Models.Responses;
 using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Webhooks;
+using Blackbird.Applications.SDK.Blueprints;
 using Newtonsoft.Json;
 
 namespace Apps.Monday.Webhooks;
@@ -17,6 +18,7 @@ namespace Apps.Monday.Webhooks;
 [WebhookList]
 public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable(invocationContext)
 {
+    [BlueprintEventDefinition(BlueprintEvent.TestWebhookEvent)]
     [Webhook("On item created", typeof(ItemCreatedHandler), 
         Description = "This event is triggered when an item is created")]
     public Task<WebhookResponse<ItemResponse>> OnItemCreated(WebhookRequest request) 
