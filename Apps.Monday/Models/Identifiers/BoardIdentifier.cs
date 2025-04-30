@@ -8,7 +8,4 @@ public class BoardIdentifier
 {
     [Display("Board ID"), DataSource(typeof(BoardDataHandler))]
     public string BoardId { get; set; } = string.Empty;
-
-    [Display("Text")]
-    public string? Text { get; set; }
 }

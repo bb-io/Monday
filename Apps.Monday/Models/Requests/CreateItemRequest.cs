@@ -18,7 +18,4 @@ public class CreateItemRequest : BoardIdentifier
 
     [Display("Column values")]
     public IEnumerable<string>? ColumnValues { get; set; }
-
-    [Display("Text", Description = "Text")]
-    public string Text { get; set; }
 }

@@ -10,7 +10,6 @@ using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
-using Blackbird.Applications.SDK.Blueprints;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -54,7 +53,6 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
         return response.Data.Items.First();
     }
 
-    [BlueprintActionDefinition(BlueprintAction.TestAction)]
     [Action("Create item", Description = "Creates an item with the specified parameters")]
     public async Task<ItemResponse> CreateItemAsync([ActionParameter] CreateItemRequest createItemRequest)
     {
