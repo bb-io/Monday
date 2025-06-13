@@ -12,6 +12,7 @@ using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Blackbird.Applications.SDK.Blueprints;
 
 namespace Apps.Monday.Actions;
 
@@ -19,6 +20,7 @@ namespace Apps.Monday.Actions;
 public class ItemActions(InvocationContext invocationContext) : AppInvocable(invocationContext)
 {
     [Action("Search items", Description = "Retrieves all items from a specific board")]
+    [BlueprintActionDefinition(BlueprintAction.TestAction4)]
     public async Task<SearchItemsResponse> SearchItemsAsync([ActionParameter] BoardIdentifier boardIdentifier)
     {
         var variables = new { ids = long.Parse(boardIdentifier.BoardId) };
@@ -39,6 +41,7 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     }
 
     [Action("Get item", Description = "Retrieves an item by its specified ID")]
+    [BlueprintActionDefinition(BlueprintAction.TestAction2)]
     public async Task<ItemResponse> GetItemAsync([ActionParameter] ItemIdentifier itemIdentifier)
     {
         var variables = new { ids = long.Parse(itemIdentifier.ItemId) };
@@ -54,6 +57,7 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     }
 
     [Action("Create item", Description = "Creates an item with the specified parameters")]
+    [BlueprintActionDefinition(BlueprintAction.TestAction1)]
     public async Task<ItemResponse> CreateItemAsync([ActionParameter] CreateItemRequest createItemRequest)
     {
         var variables = new Dictionary<string, string>
@@ -93,6 +97,7 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     }
     
     [Action("Delete item", Description = "Deletes an item by its specified ID")]
+    [BlueprintActionDefinition(BlueprintAction.TestAction3)]
     public async Task DeleteItemAsync([ActionParameter] ItemIdentifier itemIdentifier)
     {
         var variables = new
@@ -105,6 +110,7 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     }
     
     [Action("Archive  item", Description = "Archives an item by its specified ID")]
+    [BlueprintActionDefinition(BlueprintAction.TestAction5)]
     public async Task ArchiveItemAsync([ActionParameter] ItemIdentifier itemIdentifier)
     {
         var variables = new
