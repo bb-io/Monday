@@ -46,7 +46,8 @@ public class ItemActionsTests : TestBase
         var response = await actions.CreateItemAsync(new()
         {
             BoardId = BoardId,
-            ItemName = $"Tests.Monday item {Guid.NewGuid()}",
+            //ItemName = $"Tests.Monday item {Guid.NewGuid()}",
+            InputText = $"Tests.Monday item {Guid.NewGuid()}",
             GroupId = "group_title"
         });
 
@@ -69,7 +70,8 @@ public class ItemActionsTests : TestBase
         var response = await actions.CreateItemAsync(new()
         {
             BoardId = BoardId,
-            ItemName = $"Tests.Monday item {Guid.NewGuid()}",
+            //ItemName = $"Tests.Monday item {Guid.NewGuid()}",
+            InputText = $"Tests.Monday item {Guid.NewGuid()}",
             GroupId = "group_title",
             ColumnIds = new[] { "date4", "status", "person" },
             ColumnValues = new[] { "2023-05-25", "Done", "vitalii.bezuhlyi@blackbird.io" }
@@ -94,7 +96,8 @@ public class ItemActionsTests : TestBase
         var response = await actions.CreateItemAsync(new()
         {
             BoardId = BoardId,
-            ItemName = $"Tests.Monday item {Guid.NewGuid()}",
+            //ItemName = $"Tests.Monday item {Guid.NewGuid()}",
+            InputText = $"Tests.Monday item {Guid.NewGuid()}",
             GroupId = "group_title"
         });
 
