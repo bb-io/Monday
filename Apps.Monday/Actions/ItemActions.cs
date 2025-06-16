@@ -63,8 +63,7 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
         var variables = new Dictionary<string, string>
         {
             { "board_id", createItemRequest.BoardId },
-            //{ "item_name", createItemRequest.ItemName }
-            { "item_name", createItemRequest.InputText }
+            { "item_name", createItemRequest.ItemName }
         };
 
         if (!string.IsNullOrEmpty(createItemRequest.GroupId))
