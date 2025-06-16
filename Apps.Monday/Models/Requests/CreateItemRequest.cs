@@ -7,7 +7,7 @@ namespace Apps.Monday.Models.Requests;
 
 public class CreateItemRequest : BoardIdentifier
 {
-    [Display("Item name")]
+    [Display("Text")]
     public string ItemName { get; set; } = string.Empty;
 
     [Display("Group ID"), DataSource(typeof(GroupDataHandler))]
