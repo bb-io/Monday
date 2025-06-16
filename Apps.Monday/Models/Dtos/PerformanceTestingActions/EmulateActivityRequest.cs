@@ -1,4 +1,3 @@
-﻿using Apps.Monday.DataSourceHandlers;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Dictionaries;
 using Blackbird.Applications.Sdk.Common.Dynamic;
@@ -6,20 +5,22 @@ using Blackbird.Applications.Sdk.Common.Files;
 using TestPlugin.DynamicHandlers;
 using TestPlugin.DynamicHandlers.StaticDataHandlers;
 
-namespace Apps.Monday.Models.Identifiers;
+namespace TestPlugin.Dtos.PerformanceTestingActions;
 
-public class BoardIdentifier
+public class EmulateActivityRequest
 {
-    [Display("Board ID"), DataSource(typeof(BoardDataHandler))]
-    public string BoardId { get; set; } = string.Empty;
+    public int TimeoutSeconds { get; set; }
+    
+    [DataSource(typeof(DataSourceWithDelay))]
+    public string? DynamicInput { get; set; }
 
     [DataSource(typeof(DynamicSimpleHandler))]
     [Display("Text (Dynamic)")]
     public string? InputTextDynamic { get; set; }
 
-    //[DataSource(typeof(DynamicItemsSimpleHandler))]
-    //[Display("Text (Dynamic NH)")]
-    //public string? InputTextDynamicNewHandler { get; set; }
+    [DataSource(typeof(DynamicItemsSimpleHandler))]
+    [Display("Text (Dynamic NH)")]
+    public string? InputTextDynamicNewHandler { get; set; }
 
     [StaticDataSource(typeof(SimpleStaticDataHandler))]
     [Display("Text (Static)")]
