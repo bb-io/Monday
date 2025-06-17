@@ -17,9 +17,9 @@ public class BoardIdentifier
     [Display("Text (Dynamic)")]
     public string? InputTextDynamic { get; set; }
 
-    //[DataSource(typeof(DynamicItemsSimpleHandler))]
-    //[Display("Text (Dynamic NH)")]
-    //public string? InputTextDynamicNewHandler { get; set; }
+    [DataSource(typeof(DynamicItemsSimpleHandler))]
+    [Display("Text (Dynamic NH)")]
+    public string? InputTextDynamicNewHandler { get; set; }
 
     [StaticDataSource(typeof(SimpleStaticDataHandler))]
     [Display("Text (Static)")]
