@@ -110,7 +110,6 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     }
     
     [Action("Archive  item", Description = "Archives an item by its specified ID")]
-    [BlueprintActionDefinition(BlueprintAction.TestAction5)]
     public async Task ArchiveItemAsync([ActionParameter] ItemIdentifier itemIdentifier)
     {
         var variables = new
@@ -123,6 +122,7 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     }
 
     [Action("Update item", Description = "Updates a custom field for an item")]
+    [BlueprintActionDefinition(BlueprintAction.TestAction5)]
     public async Task<ItemResponse> UpdateItemAsync([ActionParameter] UpdateItemRequest request)
     {
         string valueJson = TransformCustomFieldValue(request.ColumnId, request.Value);
