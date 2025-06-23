@@ -110,6 +110,7 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     }
     
     [Action("Archive  item", Description = "Archives an item by its specified ID")]
+    [BlueprintActionDefinition(BlueprintAction.TestAction7)]
     public async Task ArchiveItemAsync([ActionParameter] ItemIdentifier itemIdentifier)
     {
         var variables = new
