@@ -13,7 +13,7 @@ using Blackbird.Applications.Sdk.Common.Invocation;
 
 namespace Apps.Monday.Actions;
 
-[ActionList]
+[ActionList("Boards")]
 public class BoardActions(InvocationContext invocationContext) : AppInvocable(invocationContext)
 {
     [Action("Search boards", Description = "Retrieves all boards filtered by the specified parameters")]

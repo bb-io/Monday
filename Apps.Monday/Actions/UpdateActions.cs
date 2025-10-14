@@ -15,7 +15,7 @@ using RestSharp;
 
 namespace Apps.Monday.Actions;
 
-[ActionList]
+[ActionList("Updates")]
 public class UpdateActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : AppInvocable(invocationContext)
 {
     [Action("Get update", Description = "Retrieves an update based on the specified Item ID")] 

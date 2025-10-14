@@ -15,7 +15,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Apps.Monday.Actions;
 
-[ActionList]
+[ActionList("Items")]
 public class ItemActions(InvocationContext invocationContext) : AppInvocable(invocationContext)
 {
     [Action("Search items", Description = "Retrieves all items from a specific board")]
