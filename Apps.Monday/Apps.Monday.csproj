@@ -6,13 +6,13 @@
         <Nullable>enable</Nullable>
         <Product>Monday [Beta]</Product>
         <Description>Monday.com is a cloud-based work operating system that can be used for a variety of needs, including project management, collaboration, and scheduling</Description>
-        <Version>1.0.6</Version>
+        <Version>1.0.7</Version>
         <PackageId>Apps.Monday</PackageId>
         <AssemblyName>Apps.Monday</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blackbird.Applications.Sdk.Common" Version="2.11.0" />
+        <PackageReference Include="Blackbird.Applications.Sdk.Common" Version="2.14.0" />
         <PackageReference Include="Blackbird.Applications.SDK.Extensions.FileManagement" Version="1.0.2-alpha3" />
         <PackageReference Include="Blackbird.Applications.Sdk.Utils" Version="1.0.26" />
     </ItemGroup>
