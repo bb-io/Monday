@@ -4,9 +4,9 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Product>Monday [Beta]</Product>
+        <Product>Monday</Product>
         <Description>Monday.com is a cloud-based work operating system that can be used for a variety of needs, including project management, collaboration, and scheduling</Description>
-        <Version>1.0.7</Version>
+        <Version>1.0.8</Version>
         <PackageId>Apps.Monday</PackageId>
         <AssemblyName>Apps.Monday</AssemblyName>
     </PropertyGroup>
