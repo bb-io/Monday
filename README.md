@@ -64,6 +64,7 @@ If you are a member or admin of a Monday.com account, follow these steps to acce
 
 - **On item created**: This event is triggered when an item is created.
 - **On item changed**: This event is triggered when an item is changed.
+- **On status change**: This event is triggered when a status column value changes.
 - **On item archived**: This event is triggered when an item is archived.
 - **On item deleted**: This event is triggered when an item is deleted.
 

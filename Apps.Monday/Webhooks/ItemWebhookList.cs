@@ -26,6 +26,11 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
         Description = "This event is triggered when an item is changed")]
     public Task<WebhookResponse<ItemResponse>> OnItemChanged(WebhookRequest request) 
         => HandleWebhookRequest(request);
+
+    [Webhook("On status change", typeof(StatusChangedHandler),
+        Description = "This event is triggered when a status column value changes")]
+    public Task<WebhookResponse<ItemResponse>> OnStatusChanged(WebhookRequest request)
+        => HandleWebhookRequest(request);
     
     [Webhook("On item archived", typeof(ItemArchivedHandler),
         Description = "This event is triggered when an item is archived")]
