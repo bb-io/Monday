@@ -128,6 +128,34 @@ public static class GraphQlQueries
         }
     ";
 
+    public const string GetSubitemsByItemId = @"
+        query($ids: ID!) {
+            items(ids: [$ids]) {
+                id
+                subitems {
+                    id
+                    name
+                    created_at
+                    updated_at
+                    board {
+                        id
+                        name
+                    }
+                    column_values {
+                        id
+                        text
+                        type
+                        value
+                        column {
+                            id
+                            title
+                        }
+                    }
+                }
+            }
+        }
+    ";
+
     public const string GetUsers = @"
         query {
             users {

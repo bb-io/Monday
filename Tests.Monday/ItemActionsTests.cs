@@ -15,7 +15,7 @@ public class ItemActionsTests : TestBase
         var actions = new ItemActions(InvocationContext);
         var response = await actions.SearchItemsAsync(new()
         {
-            BoardId = BoardId
+            BoardId = "1753020434"
         });
 
         response.TotalCount.Should().BeGreaterThan(0);
@@ -36,6 +36,23 @@ public class ItemActionsTests : TestBase
         });
 
         response.Id.Should().NotBeEmpty();
+        Console.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+    }
+
+    [TestMethod]
+    public async Task GetSubitems_WithValidItemId_ShouldReturnResponse()
+    {
+        var actions = new ItemActions(InvocationContext);
+        var response = await actions.GetSubitemsAsync(new()
+        {
+            BoardId = "5094264322",
+            ItemId = "2826268776"
+        });
+
+        response.Should().NotBeNull();
+        response.Items.Should().NotBeNull();
+        response.TotalCount.Should().Be(response.Items.Count);
+
         Console.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
     }
 

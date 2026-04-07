@@ -53,6 +53,42 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
         return response.Data.Items.First();
     }
 
+    [Action("Get subitems", Description = "Retrieves all subitems for a specified item, including their fields")]
+    public async Task<SearchSubitemsResponse> GetSubitemsAsync([ActionParameter] ItemIdentifier itemIdentifier)
+    {
+        var variables = new { ids = long.Parse(itemIdentifier.ItemId) };
+        var request = new ApiRequest(GraphQlQueries.GetSubitemsByItemId, variables, Creds);
+
+        var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SubitemsQueryResponse>>(request);
+        if (response?.Data == null || !response.Data.Items.Any())
+        {
+            throw new PluginApplicationException($"Unable to find an item with the specified ID ({itemIdentifier.ItemId})");
+        }
+
+        var subitems = response.Data.Items.First().Subitems.Select(subitem => new SubitemResponse
+        {
+            Id = subitem.Id,
+            Name = subitem.Name,
+            CreatedAt = subitem.CreatedAt,
+            UpdatedAt = subitem.UpdatedAt,
+            Board = subitem.Board,
+            Fields = subitem.ColumnValues.Select(columnValue => new SubitemFieldResponse
+            {
+                Id = columnValue.Id,
+                Title = columnValue.Column?.Title ?? string.Empty,
+                Type = columnValue.Type,
+                Text = columnValue.Text,
+                Value = columnValue.Value
+            }).ToList()
+        }).ToList();
+
+        return new SearchSubitemsResponse
+        {
+            Items = subitems,
+            TotalCount = subitems.Count
+        };
+    }
+
     [Action("Create item", Description = "Creates an item with the specified parameters")]
     public async Task<ItemResponse> CreateItemAsync([ActionParameter] CreateItemRequest createItemRequest)
     {
