@@ -44,6 +44,7 @@ If you are a member or admin of a Monday.com account, follow these steps to acce
 
 - **Search items**: Retrieves all items from a specific board.
 - **Get item**: Retrieves an item by its specified ID.
+- **Get subitems**: Retrieves all subitems for a specified item, including their fields.
 - **Create item**: Creates an item with the specified parameters.
 - **Delete item**: Deletes an item by its specified ID.
 - **Archive item**: Archives an item by its specified ID.
@@ -64,6 +65,7 @@ If you are a member or admin of a Monday.com account, follow these steps to acce
 
 - **On item created**: This event is triggered when an item is created.
 - **On item changed**: This event is triggered when an item is changed.
+- **On status change**: This event is triggered when a status column value changes.
 - **On item archived**: This event is triggered when an item is archived.
 - **On item deleted**: This event is triggered when an item is deleted.
 
