@@ -128,6 +128,18 @@ public static class GraphQlQueries
         }
     ";
 
+    public const string GetBoardWebhooks = @"
+        query($board_id: ID!) {
+            webhooks(board_id: $board_id, app_webhooks_only: true) {
+                id
+                board_id
+                event
+                config
+                url
+            }
+        }
+    ";
+
     public const string GetSubitemsByItemId = @"
         query($ids: ID!) {
             items(ids: [$ids]) {

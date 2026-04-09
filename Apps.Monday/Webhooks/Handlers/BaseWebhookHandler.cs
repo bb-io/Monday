@@ -1,13 +1,13 @@
-﻿using Apps.Monday.Api;
+using Apps.Monday.Api;
 using Apps.Monday.Constants;
 using Apps.Monday.Invocables;
 using Apps.Monday.Models.Dtos;
 using Apps.Monday.Models.Identifiers;
+using Apps.Monday.Webhooks.Bridge;
 using Apps.Monday.Webhooks.Models.Responses;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Webhooks;
-using RestSharp;
 
 namespace Apps.Monday.Webhooks.Handlers;
 
@@ -16,66 +16,100 @@ public abstract class BaseWebhookHandler(
     [WebhookParameter] BoardIdentifier boardIdentifier)
     : AppInvocable(invocationContext), IWebhookEventHandler
 {
-    private const string AppName = "monday";
-
     protected abstract string Event { get; }
+
+    protected virtual string? GetWebhookConfig() => null;
+
+    protected virtual bool MatchesExistingWebhook(WebhookResponse webhook) =>
+        MatchesBridgeTarget(webhook) && MatchesDefaultConfig(webhook.Config);
 
     public async Task SubscribeAsync(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProvider,
         Dictionary<string, string> values)
     {
+        var bridge = CreateBridgeService(authenticationCredentialsProvider);
+        bridge.Subscribe(Event, boardIdentifier.BoardId, values["payloadUrl"]);
+
+        var existingWebhooks = await GetBoardWebhooksAsync();
+        if (existingWebhooks.Any(MatchesExistingWebhook))
+        {
+            return;
+        }
+
         var variables = new
         {
             board_id = boardIdentifier.BoardId,
-            url = values["payloadUrl"],
-            @event = Event
+            url = GetBridgeWebhookUrl(),
+            @event = Event,
+            config = GetWebhookConfig()
         };
 
         var request = new ApiRequest(GraphQlMutations.CreateWebhook, variables, Creds);
-        var createWebhookResponse =
-            await Client.ExecuteWithErrorHandling<DataWrapperDto<CreateWebhookResponse>>(request);
-
-        var bridgeClient =
-            new RestClient($"{InvocationContext.UriInfo.BridgeServiceUrl.ToString().TrimEnd('/')}/storage/{AppName}");
-
-        var encodedPayload = Uri.EscapeDataString(values["payloadUrl"]);
-        var bridgePostRequest = new RestRequest($"/payload?{encodedPayload}", Method.Post)
-            .AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdToken)
-            .AddBody(createWebhookResponse.Data.CreateWebhook.Id);
-
-        await bridgeClient.ExecuteAsync(bridgePostRequest);
+        await Client.ExecuteWithErrorHandling<DataWrapperDto<CreateWebhookResponse>>(request);
     }
 
     public async Task UnsubscribeAsync(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProvider,
         Dictionary<string, string> values)
     {
-        var bridgeClient =
-            new RestClient($"{InvocationContext.UriInfo.BridgeServiceUrl.ToString().TrimEnd('/')}/storage/{AppName}");
+        var bridge = CreateBridgeService(authenticationCredentialsProvider);
+        bridge.Unsubscribe(Event, boardIdentifier.BoardId, values["payloadUrl"]);
 
-        var encodedPayload = Uri.EscapeDataString(values["payloadUrl"]);
-        var bridgeGetRequest = new RestRequest($"/payload?{encodedPayload}", Method.Get)
-            .AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdToken);
-
-        var response = await bridgeClient.ExecuteAsync(bridgeGetRequest);
-        if (response.IsSuccessStatusCode)
+        if (bridge.IsAnySubscriberExist(Event, boardIdentifier.BoardId))
         {
-            var webhookId = response.Content!;
-            var rawId = webhookId.Trim('"');
+            return;
+        }
+
+        var matchingWebhooks = (await GetBoardWebhooksAsync())
+            .Where(MatchesExistingWebhook)
+            .ToList();
+
+        foreach (var webhook in matchingWebhooks)
+        {
             var variables = new
             {
-                id = int.Parse(rawId)
+                id = int.Parse(webhook.Id)
             };
 
             var request = new ApiRequest(GraphQlMutations.DeleteWebhook, variables, Creds);
             await Client.ExecuteWithErrorHandling(request);
-
-            var bridgeDeleteRequest = new RestRequest($"/payload?{encodedPayload}", Method.Delete)
-                .AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdToken);
-            await bridgeClient.ExecuteAsync(bridgeDeleteRequest);
-        }
-        else
-        {
-            throw new InvalidOperationException(
-                $"Couldn't retrieve webhook ID from the bridge. Key: {encodedPayload}, Bridge response: Status code: {response.StatusCode}, Body: {response.Content}");
         }
     }
+
+    protected bool MatchesBridgeTarget(WebhookResponse webhook) =>
+        string.Equals(webhook.Event, Event, StringComparison.OrdinalIgnoreCase)
+        && string.Equals(webhook.Url, GetBridgeWebhookUrl(), StringComparison.OrdinalIgnoreCase);
+
+    private BridgeService CreateBridgeService(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProvider) =>
+        new(authenticationCredentialsProvider, GetBridgeWebhookUrl());
+
+    private string GetBridgeWebhookUrl() =>
+        $"{InvocationContext.UriInfo.BridgeServiceUrl.ToString().TrimEnd('/')}/webhooks/monday";
+
+    private async Task<List<WebhookResponse>> GetBoardWebhooksAsync()
+    {
+        var variables = new
+        {
+            board_id = boardIdentifier.BoardId
+        };
+
+        var request = new ApiRequest(GraphQlQueries.GetBoardWebhooks, variables, Creds);
+        var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<ListWebhooksResponse>>(request);
+
+        return response.Data.Webhooks;
+    }
+
+    private bool MatchesDefaultConfig(string? actualConfig)
+    {
+        var expectedConfig = GetWebhookConfig();
+        if (string.IsNullOrWhiteSpace(expectedConfig))
+        {
+            return string.IsNullOrWhiteSpace(actualConfig) || actualConfig == "{}";
+        }
+
+        return NormalizeConfig(actualConfig) == NormalizeConfig(expectedConfig);
+    }
+
+    private static string NormalizeConfig(string? config) =>
+        string.IsNullOrWhiteSpace(config)
+            ? string.Empty
+            : new string(config.Where(x => !char.IsWhiteSpace(x)).ToArray());
 }
