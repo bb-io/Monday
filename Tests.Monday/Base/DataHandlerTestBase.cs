@@ -18,7 +18,8 @@ public abstract class DataHandlerTestBase<T> : TestBase where T : IAsyncDataSour
         Console.WriteLine(sourceItems.Count);
         sourceItems.ForEach(x => Console.WriteLine($"{x.Value}: {x.DisplayName}"));
     }
-    
+
+
     [TestMethod]
     public async Task GetDataAsync_WithSearchString_ShouldReturnNotEmptyCollection()
     {
