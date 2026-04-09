@@ -8,13 +8,12 @@ using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Dynamic;
 using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
-using Blackbird.Applications.Sdk.Common.Webhooks;
 
 namespace Apps.Monday.DataSourceHandlers;
 
 public class StatusColumnDataHandler(
     InvocationContext invocationContext,
-    [WebhookParameter] StatusColumnIdentifier webhookInput)
+    [ActionParameter] StatusColumnIdentifier webhookInput)
     : AppInvocable(invocationContext), IAsyncDataSourceItemHandler
 {
     public async Task<IEnumerable<DataSourceItem>> GetDataAsync(DataSourceContext context,
