@@ -7,7 +7,9 @@ using Newtonsoft.Json;
 namespace Apps.Monday.Webhooks.Handlers.Items;
 
 public class StatusChangedHandler(InvocationContext invocationContext,
-    [WebhookParameter] StatusColumnIdentifier statusColumnIdentifier) : BaseWebhookHandler(invocationContext, statusColumnIdentifier)
+    [WebhookParameter] StatusColumnIdentifier statusColumnIdentifier) : BaseWebhookHandler(
+        invocationContext,
+        new BoardIdentifier { BoardId = statusColumnIdentifier.BoardId })
 {
     protected override string Event => "change_status_column_value";
 
