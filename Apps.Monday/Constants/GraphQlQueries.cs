@@ -135,7 +135,6 @@ public static class GraphQlQueries
                 board_id
                 event
                 config
-                url
             }
         }
     ";
