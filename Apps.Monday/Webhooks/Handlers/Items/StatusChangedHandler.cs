@@ -1,13 +1,12 @@
 using Apps.Monday.Models.Identifiers;
 using Apps.Monday.Webhooks.Models.Responses;
-using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Webhooks;
 using Newtonsoft.Json;
 
 namespace Apps.Monday.Webhooks.Handlers.Items;
 
-public class StatusChangedHandler(InvocationContext invocationContext, [ActionParameter] BoardIdentifier boardIdentifier,
+public class StatusChangedHandler(InvocationContext invocationContext, [WebhookParameter] BoardIdentifier boardIdentifier,
     [WebhookParameter] StatusColumnIdentifier statusColumnIdentifier) : BaseWebhookHandler(
         invocationContext, boardIdentifier)
 {
