@@ -91,7 +91,6 @@ public static class GraphQlMutations
             board_id
             event
             config
-            url
         }
     }";
     

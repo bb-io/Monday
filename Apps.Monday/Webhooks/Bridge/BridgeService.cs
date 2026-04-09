@@ -11,7 +11,7 @@ public class BridgeService
 
     public BridgeService(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders, string bridgeServiceUrl)
     {
-        _bridgeServiceUrl = bridgeServiceUrl;
+        _bridgeServiceUrl = $"{bridgeServiceUrl.TrimEnd('/')}/webhooks/monday";
     }
 
     public void Subscribe(string @event, string boardId, string url)
@@ -19,7 +19,7 @@ public class BridgeService
         var client = new RestClient(_bridgeServiceUrl);
         var request = new RestRequest($"/{boardId}/{@event}", Method.Post);
         request.AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdToken);
-        request.AddBody(url);
+        request.AddJsonBody(url);
 
         var response = client.Execute(request);
         if (!response.IsSuccessful)

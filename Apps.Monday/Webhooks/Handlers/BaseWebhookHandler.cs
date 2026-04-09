@@ -78,10 +78,13 @@ public abstract class BaseWebhookHandler(
     string.Equals(webhook.Event, Event, StringComparison.OrdinalIgnoreCase);
 
     private BridgeService CreateBridgeService(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProvider) =>
-        new(authenticationCredentialsProvider, GetBridgeWebhookUrl());
+        new(authenticationCredentialsProvider, GetBridgeBaseUrl());
 
     private string GetBridgeWebhookUrl() =>
-        $"{InvocationContext.UriInfo.BridgeServiceUrl.ToString().TrimEnd('/')}/webhooks/monday";
+        $"{GetBridgeBaseUrl()}/webhooks/monday";
+
+    private string GetBridgeBaseUrl() =>
+        InvocationContext.UriInfo.BridgeServiceUrl.ToString().TrimEnd('/');
 
     private async Task<List<WebhookResponse>> GetBoardWebhooksAsync()
     {

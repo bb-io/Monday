@@ -10,7 +10,7 @@ public class StatusColumnDataHandlerTests : DataHandlerTestBase<StatusColumnData
 {
     protected override StatusColumnDataHandler CreateHandler()
     {
-        return new StatusColumnDataHandler(InvocationContext, new StatusColumnIdentifier
+        return new StatusColumnDataHandler(InvocationContext, new BoardIdentifier
         {
             BoardId = BoardId
         });
