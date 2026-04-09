@@ -21,7 +21,7 @@ public class StatusColumnDataHandler(
     {
         if (string.IsNullOrEmpty(webhookInput?.BoardId))
         {
-            return [];
+            throw new Exception("Please provide Board ID first");
         }
 
         var variables = new { ids = long.Parse(webhookInput.BoardId) };

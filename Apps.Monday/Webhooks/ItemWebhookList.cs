@@ -2,6 +2,7 @@
 using Apps.Monday.Constants;
 using Apps.Monday.Invocables;
 using Apps.Monday.Models.Dtos;
+using Apps.Monday.Models.Identifiers;
 using Apps.Monday.Models.Responses.Items;
 using Apps.Monday.Webhooks.Handlers.Items;
 using Apps.Monday.Webhooks.Models;
@@ -29,7 +30,8 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
 
     [Webhook("On item status change", typeof(StatusChangedHandler),
         Description = "This event is triggered when a status column value changes")]
-    public Task<WebhookResponse<ItemResponse>> OnStatusChanged(WebhookRequest request)
+    public Task<WebhookResponse<ItemResponse>> OnStatusChanged(WebhookRequest request, [WebhookParameter] BoardIdentifier boardIdentifier,
+        [WebhookParameter] StatusColumnIdentifier statusColumnIdentifier)
         => HandleWebhookRequest(request);
     
     [Webhook("On item archived", typeof(ItemArchivedHandler),
