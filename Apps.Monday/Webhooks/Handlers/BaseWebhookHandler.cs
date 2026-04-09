@@ -75,8 +75,7 @@ public abstract class BaseWebhookHandler(
     }
 
     protected bool MatchesBridgeTarget(WebhookResponse webhook) =>
-        string.Equals(webhook.Event, Event, StringComparison.OrdinalIgnoreCase)
-        && string.Equals(webhook.Url, GetBridgeWebhookUrl(), StringComparison.OrdinalIgnoreCase);
+    string.Equals(webhook.Event, Event, StringComparison.OrdinalIgnoreCase);
 
     private BridgeService CreateBridgeService(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProvider) =>
         new(authenticationCredentialsProvider, GetBridgeWebhookUrl());
