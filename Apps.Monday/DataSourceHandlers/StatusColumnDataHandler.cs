@@ -13,15 +13,15 @@ namespace Apps.Monday.DataSourceHandlers;
 
 public class StatusColumnDataHandler(
     InvocationContext invocationContext,
-    [ActionParameter] BoardIdentifier webhookInput)
+    [ActionParameter] BoardIdentifier? webhookInput)
     : AppInvocable(invocationContext), IAsyncDataSourceItemHandler
 {
     public async Task<IEnumerable<DataSourceItem>> GetDataAsync(DataSourceContext context,
         CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(webhookInput.BoardId))
+        if (string.IsNullOrEmpty(webhookInput?.BoardId))
         {
-            throw new Exception("Please provide Board ID first");
+            return [];
         }
 
         var variables = new { ids = long.Parse(webhookInput.BoardId) };
