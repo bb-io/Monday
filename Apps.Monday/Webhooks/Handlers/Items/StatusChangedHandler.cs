@@ -1,15 +1,15 @@
 using Apps.Monday.Models.Identifiers;
 using Apps.Monday.Webhooks.Models.Responses;
+using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Webhooks;
 using Newtonsoft.Json;
 
 namespace Apps.Monday.Webhooks.Handlers.Items;
 
-public class StatusChangedHandler(InvocationContext invocationContext,
+public class StatusChangedHandler(InvocationContext invocationContext, [ActionParameter] BoardIdentifier boardIdentifier,
     [WebhookParameter] StatusColumnIdentifier statusColumnIdentifier) : BaseWebhookHandler(
-        invocationContext,
-        new BoardIdentifier { BoardId = statusColumnIdentifier.BoardId })
+        invocationContext, boardIdentifier)
 {
     protected override string Event => "change_status_column_value";
 
@@ -19,7 +19,7 @@ public class StatusChangedHandler(InvocationContext invocationContext,
         {
             columnId = new
             {
-                boardId = statusColumnIdentifier.BoardId,
+                boardId = boardIdentifier.BoardId,
                 columnId = statusColumnIdentifier.ColumnId,
                 columnType = "color",
                 isSubitemColumn = false
@@ -36,7 +36,7 @@ public class StatusChangedHandler(InvocationContext invocationContext,
     protected override bool MatchesExistingWebhook(WebhookResponse webhook) =>
         MatchesBridgeTarget(webhook)
         && !string.IsNullOrWhiteSpace(webhook.Config)
-        && webhook.Config.Contains(statusColumnIdentifier.BoardId, StringComparison.OrdinalIgnoreCase)
+        && webhook.Config.Contains(boardIdentifier.BoardId, StringComparison.OrdinalIgnoreCase)
         && webhook.Config.Contains(statusColumnIdentifier.ColumnId, StringComparison.OrdinalIgnoreCase)
         && webhook.Config.Contains("color", StringComparison.OrdinalIgnoreCase);
 }

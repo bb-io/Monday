@@ -13,7 +13,7 @@ namespace Apps.Monday.DataSourceHandlers;
 
 public class StatusColumnDataHandler(
     InvocationContext invocationContext,
-    [ActionParameter] StatusColumnIdentifier webhookInput)
+    [ActionParameter] BoardIdentifier webhookInput)
     : AppInvocable(invocationContext), IAsyncDataSourceItemHandler
 {
     public async Task<IEnumerable<DataSourceItem>> GetDataAsync(DataSourceContext context,
