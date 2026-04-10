@@ -30,8 +30,8 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
 
     [Webhook("On item status change", typeof(StatusChangedHandler),
         Description = "This event is triggered when a status column value changes")]
-    public Task<WebhookResponse<ItemResponse>> OnStatusChanged(WebhookRequest request)
-        => HandleWebhookRequest(request);
+    public Task<WebhookResponse<StatusChangedItemResponse>> OnStatusChanged(WebhookRequest request)
+        => HandleStatusChangedRequest(request);
     
     [Webhook("On item archived", typeof(ItemArchivedHandler),
         Description = "This event is triggered when an item is archived")]
@@ -53,6 +53,20 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
         {
             ReceivedWebhookRequestType = WebhookRequestType.Default,
             Result = item
+        };
+    }
+
+    private async Task<WebhookResponse<StatusChangedItemResponse>> HandleStatusChangedRequest(WebhookRequest request)
+    {
+        var body = request.Body.ToString()!;
+
+        var itemPayload = JsonConvert.DeserializeObject<EventPayload<StatusChangedPayload>>(body)!;
+        var item = await GetItemAsync(itemPayload.Event.PulseId);
+
+        return new WebhookResponse<StatusChangedItemResponse>
+        {
+            ReceivedWebhookRequestType = WebhookRequestType.Default,
+            Result = StatusChangedItemResponse.From(item, itemPayload.Event)
         };
     }
     

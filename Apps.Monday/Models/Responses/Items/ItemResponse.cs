@@ -38,7 +38,7 @@ public class ItemResponse
     public List<ColumnValueResponse> ColumnValues { get; set; } = new();
 
     [Display("Status")]
-    public string Status => ColumnValues.FirstOrDefault(cv => cv.Id.Equals("status", StringComparison.OrdinalIgnoreCase))?.Text ?? string.Empty;
+    public string Status => ColumnValues.FirstOrDefault(cv => cv.Type.Equals("status", StringComparison.OrdinalIgnoreCase))?.Text ?? string.Empty;
 }
 public class ColumnValueResponse
 {
@@ -47,4 +47,9 @@ public class ColumnValueResponse
 
     [Display("Text")]
     public string Text { get; set; } = string.Empty;
+
+    [Display("Type")]
+    public string Type { get; set; } = string.Empty;
+
+    public ColumnMetadataResponse Column { get; set; } = new();
 }

@@ -102,8 +102,12 @@ public static class GraphQlQueries
                 url
                 relative_link
                 column_values {
-                id
-                text
+                    id
+                    text
+                    type
+                    column {
+                        title
+                    }
                 }
                 updates {
                     id
