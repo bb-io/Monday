@@ -2,6 +2,7 @@
 using Apps.Monday.Constants;
 using Apps.Monday.Invocables;
 using Apps.Monday.Models.Dtos;
+using Apps.Monday.Models.Identifiers;
 using Apps.Monday.Models.Responses.Items;
 using Apps.Monday.Webhooks.Handlers.Items;
 using Apps.Monday.Webhooks.Models;
@@ -27,10 +28,10 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
     public Task<WebhookResponse<ItemResponse>> OnItemChanged(WebhookRequest request) 
         => HandleWebhookRequest(request);
 
-    [Webhook("On status change", typeof(StatusChangedHandler),
+    [Webhook("On item status change", typeof(StatusChangedHandler),
         Description = "This event is triggered when a status column value changes")]
-    public Task<WebhookResponse<ItemResponse>> OnStatusChanged(WebhookRequest request)
-        => HandleWebhookRequest(request);
+    public Task<WebhookResponse<StatusChangedItemResponse>> OnStatusChanged(WebhookRequest request)
+        => HandleStatusChangedRequest(request);
     
     [Webhook("On item archived", typeof(ItemArchivedHandler),
         Description = "This event is triggered when an item is archived")]
@@ -45,19 +46,7 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
     private async Task<WebhookResponse<ItemResponse>> HandleWebhookRequest(WebhookRequest request)
     {
         var body = request.Body.ToString()!;
-        var challenge = JsonConvert.DeserializeObject<ChallengeDto>(body);
-
-        if (challenge != null && !string.IsNullOrEmpty(challenge.Challenge))
-        {
-            var response = new HttpResponseMessage();
-            response.Content = new StringContent(body);
-            return new WebhookResponse<ItemResponse>
-            {
-                ReceivedWebhookRequestType = WebhookRequestType.Preflight,
-                HttpResponseMessage = response
-            };
-        }
-
+        
         var itemPayload = JsonConvert.DeserializeObject<EventPayload<Payload>>(body)!;
         var item = await GetItemAsync(itemPayload.Event.PulseId);
         return new WebhookResponse<ItemResponse>
@@ -66,26 +55,25 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
             Result = item
         };
     }
+
+    private async Task<WebhookResponse<StatusChangedItemResponse>> HandleStatusChangedRequest(WebhookRequest request)
+    {
+        var body = request.Body.ToString()!;
+
+        var itemPayload = JsonConvert.DeserializeObject<EventPayload<StatusChangedPayload>>(body)!;
+        var item = await GetItemAsync(itemPayload.Event.PulseId);
+
+        return new WebhookResponse<StatusChangedItemResponse>
+        {
+            ReceivedWebhookRequestType = WebhookRequestType.Default,
+            Result = StatusChangedItemResponse.From(item, itemPayload.Event)
+        };
+    }
     
     private Task<WebhookResponse<ItemIdResponse>> HandleArchivedOrDeletedRequest(WebhookRequest request)
     {
         var body = request.Body.ToString()!;
-        var challenge = JsonConvert.DeserializeObject<ChallengeDto>(body);
-
-        if (challenge != null && !string.IsNullOrEmpty(challenge.Challenge))
-        {
-            var response = new HttpResponseMessage
-            {
-                Content = new StringContent(body)
-            };
-
-            return Task.FromResult(new WebhookResponse<ItemIdResponse>
-            {
-                ReceivedWebhookRequestType = WebhookRequestType.Preflight,
-                HttpResponseMessage = response
-            });
-        }
-
+        
         var itemPayload = JsonConvert.DeserializeObject<EventPayload<DeleteItemPayload>>(body)!;
         return Task.FromResult(new WebhookResponse<ItemIdResponse>
         {
@@ -99,7 +87,7 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
 
     private async Task<ItemResponse> GetItemAsync(string itemId)
     {
-        var variables = new { ids = int.Parse(itemId) };
+        var variables = new { ids = long.Parse(itemId) };
         var request = new ApiRequest(GraphQlQueries.GetItemById, variables, Creds);
 
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SearchItemsResponse>>(request);

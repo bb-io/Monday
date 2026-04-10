@@ -102,8 +102,12 @@ public static class GraphQlQueries
                 url
                 relative_link
                 column_values {
-                id
-                text
+                    id
+                    text
+                    type
+                    column {
+                        title
+                    }
                 }
                 updates {
                     id
@@ -124,6 +128,17 @@ public static class GraphQlQueries
                     id,
                     name
                 }
+            }
+        }
+    ";
+
+    public const string GetBoardWebhooks = @"
+        query($board_id: ID!) {
+            webhooks(board_id: $board_id, app_webhooks_only: true) {
+                id
+                board_id
+                event
+                config
             }
         }
     ";
