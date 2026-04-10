@@ -65,7 +65,7 @@ public class UpdateWebhookList(InvocationContext invocationContext) : AppInvocab
     
     private async Task<ItemResponse> GetItemAsync(string itemId)
     {
-        var variables = new { ids = int.Parse(itemId) };
+        var variables = new { ids = long.Parse(itemId) };
         var request = new ApiRequest(GraphQlQueries.GetItemById, variables, Creds);
 
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SearchItemsResponse>>(request);
