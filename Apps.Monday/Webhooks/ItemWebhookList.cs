@@ -46,19 +46,7 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
     private async Task<WebhookResponse<ItemResponse>> HandleWebhookRequest(WebhookRequest request)
     {
         var body = request.Body.ToString()!;
-        var challenge = JsonConvert.DeserializeObject<ChallengeDto>(body);
-
-        if (challenge != null && !string.IsNullOrEmpty(challenge.Challenge))
-        {
-            var response = new HttpResponseMessage();
-            response.Content = new StringContent(body);
-            return new WebhookResponse<ItemResponse>
-            {
-                ReceivedWebhookRequestType = WebhookRequestType.Preflight,
-                HttpResponseMessage = response
-            };
-        }
-
+        
         var itemPayload = JsonConvert.DeserializeObject<EventPayload<Payload>>(body)!;
         var item = await GetItemAsync(itemPayload.Event.PulseId);
         return new WebhookResponse<ItemResponse>
@@ -71,22 +59,7 @@ public class ItemWebhookList(InvocationContext invocationContext) : AppInvocable
     private Task<WebhookResponse<ItemIdResponse>> HandleArchivedOrDeletedRequest(WebhookRequest request)
     {
         var body = request.Body.ToString()!;
-        var challenge = JsonConvert.DeserializeObject<ChallengeDto>(body);
-
-        if (challenge != null && !string.IsNullOrEmpty(challenge.Challenge))
-        {
-            var response = new HttpResponseMessage
-            {
-                Content = new StringContent(body)
-            };
-
-            return Task.FromResult(new WebhookResponse<ItemIdResponse>
-            {
-                ReceivedWebhookRequestType = WebhookRequestType.Preflight,
-                HttpResponseMessage = response
-            });
-        }
-
+        
         var itemPayload = JsonConvert.DeserializeObject<EventPayload<DeleteItemPayload>>(body)!;
         return Task.FromResult(new WebhookResponse<ItemIdResponse>
         {
