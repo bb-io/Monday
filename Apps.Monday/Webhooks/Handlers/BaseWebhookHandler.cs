@@ -17,6 +17,7 @@ public abstract class BaseWebhookHandler(
     : AppInvocable(invocationContext), IWebhookEventHandler
 {
     protected abstract string Event { get; }
+    protected virtual string BridgeEvent => Event;
 
     protected virtual string? GetWebhookConfig() => null;
     
@@ -31,7 +32,7 @@ public abstract class BaseWebhookHandler(
         string bridgeBoardId = await GetBridgeBoardIdAsync();
         
         var bridge = CreateBridgeService(authenticationCredentialsProvider);
-        bridge.Subscribe(Event, bridgeBoardId, values["payloadUrl"]);
+        bridge.Subscribe(BridgeEvent, bridgeBoardId, values["payloadUrl"]);
 
         var existingWebhooks = await GetBoardWebhooksAsync();
         if (existingWebhooks.Any(MatchesExistingWebhook))
@@ -57,9 +58,9 @@ public abstract class BaseWebhookHandler(
         string bridgeBoardId = await GetBridgeBoardIdAsync();
         
         var bridge = CreateBridgeService(authenticationCredentialsProvider);
-        bridge.Unsubscribe(Event, bridgeBoardId, values["payloadUrl"]);
+        bridge.Unsubscribe(BridgeEvent, bridgeBoardId, values["payloadUrl"]);
 
-        if (bridge.IsAnySubscriberExist(Event, bridgeBoardId))
+        if (bridge.IsAnySubscriberExist(BridgeEvent, bridgeBoardId))
         {
             return;
         }

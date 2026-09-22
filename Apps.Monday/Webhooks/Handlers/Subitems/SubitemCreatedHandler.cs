@@ -10,4 +10,5 @@ public class SubitemCreatedHandler(
     : SubitemWebhookHandler(invocationContext, boardIdentifier)
 {
     protected override string Event => "create_subitem";
+    protected override string BridgeEvent => "create_item";
 }
