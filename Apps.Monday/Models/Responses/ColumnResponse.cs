@@ -12,6 +12,7 @@ public class ColumnResponse
 
     public string Type { get; set; } = string.Empty;
 
-    [DefinitionIgnore, JsonProperty("settingsStr")]
-    public SettingsStrResponse? SettingsStr { get; set; }
+    // JSON-encoded string
+    [DefinitionIgnore, JsonProperty("settings_str")]
+    public string? SettingsStr { get; set; }
 }
