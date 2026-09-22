@@ -135,5 +135,11 @@ public static class GraphQlMutations
     }
 }";
 
-
+    public const string AddFileToColumn = @"mutation($item_id: ID!, $column_id: String!, $file: File!) { 
+        add_file_to_column (item_id: $item_id, column_id: $column_id, file: $file) {
+            id
+            name
+            file_extension
+        }
+    }";
 }
