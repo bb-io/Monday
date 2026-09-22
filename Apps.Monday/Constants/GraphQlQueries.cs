@@ -131,6 +131,19 @@ public static class GraphQlQueries
             }
         }
     ";
+    
+    public const string GetItemAssetsById = @"
+        query($ids: ID!) {
+            items(ids: [$ids]) {
+                assets {
+                    id
+                    name
+                    file_extension
+                    public_url
+                }
+            }
+        }
+    ";
 
     public const string GetBoardWebhooks = @"
         query($board_id: ID!) {

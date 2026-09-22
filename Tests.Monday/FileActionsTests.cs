@@ -27,10 +27,29 @@ public class FileActionsTests : TestBase
         };
 
         // Act
-        var result = await Actions.AddFileToColumnAsync(item, addRequest);
+        var result = await Actions.AddFileToColumn(item, addRequest);
 
         // Assert
         PrintResult(result);
         Assert.IsNotNull(result);
+    }
+
+    [TestMethod]
+    public async Task DownloadFile_IsSuccess()
+    {
+        // Arrange
+        var item = new ItemIdentifier
+        {
+            ItemId = "3237187394",
+            BoardId = BoardId,
+        };
+        var downloadRequest = new DownloadFileRequest { FileId = "273139524" };
+
+        // Act
+        var result = await Actions.DownloadFile(item, downloadRequest);
+
+        // Assert
+        Console.WriteLine(result.File.Name);
+        Assert.IsNotNull(result.File);
     }
 }
