@@ -192,4 +192,15 @@ public static class GraphQlQueries
             }
         }
     ";
+    
+    public const string GetSubitemsColumnSettings = @"
+        query($ids: ID!) {
+            boards(ids: [$ids]) {
+                columns(types: [subtasks]) {
+                    id
+                    settings_str
+                }
+            }
+        }
+    ";
 }

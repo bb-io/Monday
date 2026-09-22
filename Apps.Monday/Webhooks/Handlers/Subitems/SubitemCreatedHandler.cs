@@ -7,7 +7,7 @@ namespace Apps.Monday.Webhooks.Handlers.Subitems;
 public class SubitemCreatedHandler(
     InvocationContext invocationContext,
     [WebhookParameter] BoardIdentifier boardIdentifier) 
-    : BaseWebhookHandler(invocationContext, boardIdentifier)
+    : SubitemWebhookHandler(invocationContext, boardIdentifier)
 {
     protected override string Event => "create_subitem";
 }
