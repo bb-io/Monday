@@ -12,7 +12,7 @@ public class FileActionsTests : TestBase
     public FileActions Actions => new(InvocationContext, FileManager);
     
     [TestMethod]
-    public async Task AddFileToColumnAsync_ReturnsAddedFile()
+    public async Task UploadFileToColumnAsync_ReturnsAddedFile()
     {
         // Arrange
         var item = new ItemIdentifier
@@ -20,14 +20,14 @@ public class FileActionsTests : TestBase
             ItemId = "3237187394",
             BoardId = BoardId,
         };
-        var addRequest = new AddFileToColumnRequest
+        var addRequest = new UploadFileToColumnRequest
         {
             File = new FileReference { Name = "test.docx" },
             ColumnId = "file_mm7evjf8"
         };
 
         // Act
-        var result = await Actions.AddFileToColumn(item, addRequest);
+        var result = await Actions.UploadFileToColumn(item, addRequest);
 
         // Assert
         PrintResult(result);

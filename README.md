@@ -62,7 +62,7 @@ If you are a member or admin of a Monday.com account, follow these steps to acce
 ### Files
 
 - **Download file**: Download a specific file from an item.
-- **Add file to column**: Adds a file to a specific file column of an item.
+- **Upload file to column**: Uploads a file to a specific file column of an item.
 
 ## Events
 

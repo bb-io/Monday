@@ -47,23 +47,23 @@ public class FileActions(InvocationContext invocationContext, IFileManagementCli
         return new(fileReference);
     }
     
-    [Action("Add file to column", Description = "Adds a file to a specific file column of an item")]
-    public async Task<AssetResponse> AddFileToColumn(
+    [Action("Upload file to column", Description = "Uploads a file to a specific file column of an item")]
+    public async Task<AssetResponse> UploadFileToColumn(
         [ActionParameter] ItemIdentifier itemIdentifier,
-        [ActionParameter] AddFileToColumnRequest addRequest)
+        [ActionParameter] UploadFileToColumnRequest uploadRequest)
     {
         var variables = new
         {
             item_id = itemIdentifier.ItemId,
-            column_id = addRequest.ColumnId
+            column_id = uploadRequest.ColumnId
         };
 
-        await using var stream = await fileManagementClient.DownloadAsync(addRequest.File);
+        await using var stream = await fileManagementClient.DownloadAsync(uploadRequest.File);
         var bytes = await stream.GetByteData();
 
         var map = new { file = "variables.file" };
         var request = new ApiRequest("/file", GraphQlMutations.AddFileToColumn, variables, map, Creds)
-            .AddFile("file", bytes, addRequest.File.Name);
+            .AddFile("file", bytes, uploadRequest.File.Name);
 
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<AddFileToColumnResponse>>(request);
         return response.Data.AddFileToColumn;

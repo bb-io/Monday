@@ -5,7 +5,7 @@ using Blackbird.Applications.Sdk.Common.Files;
 
 namespace Apps.Monday.Models.Requests;
 
-public class AddFileToColumnRequest
+public class UploadFileToColumnRequest
 {
     [Display("File column ID"), DataSource(typeof(FileColumnDataHandler))]
     public string ColumnId { get; set; } = string.Empty;
