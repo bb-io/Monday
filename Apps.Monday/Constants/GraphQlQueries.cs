@@ -2,8 +2,59 @@
 
 public static class GraphQlQueries
 {
-    public const string GetUserData = "query {users (limit:50) {created_at email account { name id}}}";
+    private const string ItemFields = @"
+        id
+        name
+        created_at
+        updated_at
+        email
+        url
+        relative_link
+        updates {
+            id
+            text_body
+            edited_at
+            assets {
+                id
+                name
+                file_extension
+            }
+        }
+        assets {
+            id
+            name
+            file_extension
+        }
+        board {
+            id
+            name
+        }
+    ";
 
+    public const string GetBoardWithItemsById = @"
+        query($ids: ID!, $limit: Int!) {
+            boards(ids: [$ids]) {
+                items_page(limit: $limit) {
+                    cursor
+                    items {
+                        " + ItemFields + @"
+                    }
+                }
+            }
+        }
+    ";
+
+    public const string GetNextItemsPage = @"
+        query($cursor: String!, $limit: Int!) {
+            next_items_page(cursor: $cursor, limit: $limit) {
+                cursor
+                items {" + ItemFields + @"}
+            }
+        }
+    ";
+    
+    public const string GetUserData = "query {users (limit:50) {created_at email account { name id}}}";
+    
     public const string GetBoards = @"
         query($limit: Int!, $page: Int!) {
             boards(limit: $limit, page: $page) {
@@ -50,43 +101,6 @@ public static class GraphQlQueries
                     title
                     type
                 }
-            }
-        }
-    ";
-
-    public const string GetBoardWithItemsById = @"
-        query($ids: ID!) {
-            boards(ids: [$ids]) {
-                items_page {
-                    items {
-                       id
-                       name
-                       created_at
-                       updated_at
-                       email
-                       url
-                       relative_link
-                       updates {
-                            id
-                            text_body
-                            edited_at
-                            assets {
-                                id
-                                name
-                                file_extension
-                            }
-                       }
-                       assets {
-                            id
-                            name
-                            file_extension
-                       }
-                       board {
-                           id
-                           name
-                       }
-                   }
-               }
             }
         }
     ";

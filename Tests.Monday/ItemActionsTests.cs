@@ -15,7 +15,7 @@ public class ItemActionsTests : TestBase
         var actions = new ItemActions(InvocationContext);
         var response = await actions.SearchItemsAsync(new()
         {
-            BoardId = "1753020434"
+            BoardId = BoardId
         });
 
         response.TotalCount.Should().BeGreaterThan(0);

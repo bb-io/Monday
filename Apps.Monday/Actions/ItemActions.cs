@@ -21,16 +21,13 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     [Action("Search items", Description = "Retrieves all items from a specific board")]
     public async Task<SearchItemsResponse> SearchItemsAsync([ActionParameter] BoardIdentifier boardIdentifier)
     {
-        var variables = new { ids = long.Parse(boardIdentifier.BoardId) };
-        var request = new ApiRequest(GraphQlQueries.GetBoardWithItemsById, variables, Creds);
+        var variables = new Dictionary<string, object> { ["ids"] = long.Parse(boardIdentifier.BoardId) };
+        var items = await Client.PaginateByCursor<BoardItemsResponse, ItemResponse>(
+                        GraphQlQueries.GetBoardWithItemsById,
+                        variables,
+                        GraphQlQueries.GetNextItemsPage)
+                    ?? throw new PluginApplicationException($"Unable to find a board with the specified ID ({boardIdentifier.BoardId})");
 
-        var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<BoardItemsResponse>>(request);
-        if (response?.Data == null || !response.Data.Boards.Any())
-        {
-            throw new PluginApplicationException($"Unable to find a board with the specified ID ({boardIdentifier.BoardId})");
-        }
-
-        var items = response.Data.Boards.First().ItemsPage.Items;
         return new()
         {
             Items = items,
