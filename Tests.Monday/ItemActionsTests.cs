@@ -32,7 +32,7 @@ public class ItemActionsTests : TestBase
         var response = await actions.GetItemAsync(new()
         {
             BoardId = BoardId,
-            ItemId = "1753020441"
+            ItemId = ItemId
         });
 
         response.Id.Should().NotBeEmpty();

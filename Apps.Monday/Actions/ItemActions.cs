@@ -1,5 +1,6 @@
 ﻿using Apps.Monday.Api;
 using Apps.Monday.Constants;
+using Apps.Monday.Helpers;
 using Apps.Monday.Invocables;
 using Apps.Monday.Models.Dtos;
 using Apps.Monday.Models.Identifiers;
@@ -18,6 +19,8 @@ namespace Apps.Monday.Actions;
 [ActionList("Items")]
 public class ItemActions(InvocationContext invocationContext) : AppInvocable(invocationContext)
 {
+    private readonly ItemHelper _itemHelper = new(invocationContext);
+    
     [Action("Search items", Description = "Retrieves all items from a specific board")]
     public async Task<SearchItemsResponse> SearchItemsAsync([ActionParameter] BoardIdentifier boardIdentifier)
     {
@@ -38,16 +41,8 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
     [Action("Get item", Description = "Retrieves an item by its specified ID")]
     public async Task<ItemResponse> GetItemAsync([ActionParameter] ItemIdentifier itemIdentifier)
     {
-        var variables = new { ids = long.Parse(itemIdentifier.ItemId) };
-        var request = new ApiRequest(GraphQlQueries.GetItemById, variables, Creds);
-
-        var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SearchItemsResponse>>(request);
-        if (response?.Data == null || !response.Data.Items.Any())
-        {
-            throw new PluginApplicationException($"Unable to find an item with the specified ID ({itemIdentifier.ItemId})");
-        }
-
-        return response.Data.Items.First();
+        var item = await _itemHelper.GetItem(itemIdentifier.ItemId);
+        return item;
     }
 
     [Action("Get subitems", Description = "Retrieves all subitems for a specified item, including their fields")]
@@ -166,13 +161,7 @@ public class ItemActions(InvocationContext invocationContext) : AppInvocable(inv
         var response = await Client.ExecuteWithErrorHandling<DataWrapperDto<SearchItemsResponse>>(apiRequest);
 
         if (response?.Data == null || !response.Data.Items.Any())
-        {
-            return await GetItemAsync(new ItemIdentifier
-            {
-                BoardId = request.BoardId,
-                ItemId = request.ItemId
-            });
-        }
+            return await _itemHelper.GetItem(request.ItemId);
 
         return response.Data.Items.First();
     }
