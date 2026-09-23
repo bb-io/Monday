@@ -15,7 +15,7 @@ public class ItemActionsTests : TestBase
         var actions = new ItemActions(InvocationContext);
         var response = await actions.SearchItemsAsync(new()
         {
-            BoardId = "1753020434"
+            BoardId = BoardId
         });
 
         response.TotalCount.Should().BeGreaterThan(0);
@@ -32,7 +32,7 @@ public class ItemActionsTests : TestBase
         var response = await actions.GetItemAsync(new()
         {
             BoardId = BoardId,
-            ItemId = "1753020441"
+            ItemId = ItemId
         });
 
         response.Id.Should().NotBeEmpty();

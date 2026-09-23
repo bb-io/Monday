@@ -22,7 +22,7 @@ public class ColumnDataHandler(
     {
         if (string.IsNullOrEmpty(boardIdentifier.BoardId))
         {
-            throw new Exception("Please provide Board ID first");
+            throw new PluginMisconfigurationException("Please provide Board ID first");
         }
 
         var variables = new { ids = long.Parse(boardIdentifier.BoardId) };

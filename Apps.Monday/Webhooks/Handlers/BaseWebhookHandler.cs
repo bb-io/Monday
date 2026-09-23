@@ -17,8 +17,11 @@ public abstract class BaseWebhookHandler(
     : AppInvocable(invocationContext), IWebhookEventHandler
 {
     protected abstract string Event { get; }
+    protected virtual string BridgeEvent => Event;
 
     protected virtual string? GetWebhookConfig() => null;
+    
+    protected virtual Task<string> GetBridgeBoardIdAsync() => Task.FromResult(boardIdentifier.BoardId);
 
     protected virtual bool MatchesExistingWebhook(WebhookResponse webhook) =>
         MatchesBridgeTarget(webhook) && MatchesDefaultConfig(webhook.Config);
@@ -26,8 +29,10 @@ public abstract class BaseWebhookHandler(
     public async Task SubscribeAsync(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProvider,
         Dictionary<string, string> values)
     {
+        string bridgeBoardId = await GetBridgeBoardIdAsync();
+        
         var bridge = CreateBridgeService(authenticationCredentialsProvider);
-        bridge.Subscribe(Event, boardIdentifier.BoardId, values["payloadUrl"]);
+        bridge.Subscribe(BridgeEvent, bridgeBoardId, values["payloadUrl"]);
 
         var existingWebhooks = await GetBoardWebhooksAsync();
         if (existingWebhooks.Any(MatchesExistingWebhook))
@@ -50,10 +55,12 @@ public abstract class BaseWebhookHandler(
     public async Task UnsubscribeAsync(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProvider,
         Dictionary<string, string> values)
     {
+        string bridgeBoardId = await GetBridgeBoardIdAsync();
+        
         var bridge = CreateBridgeService(authenticationCredentialsProvider);
-        bridge.Unsubscribe(Event, boardIdentifier.BoardId, values["payloadUrl"]);
+        bridge.Unsubscribe(BridgeEvent, bridgeBoardId, values["payloadUrl"]);
 
-        if (bridge.IsAnySubscriberExist(Event, boardIdentifier.BoardId))
+        if (bridge.IsAnySubscriberExist(BridgeEvent, bridgeBoardId))
         {
             return;
         }

@@ -59,6 +59,11 @@ If you are a member or admin of a Monday.com account, follow these steps to acce
 - **Edit update**: Edits an update (comment) based on the specified ID.
 - **Delete update**: Deletes an update (comment) based on the specified ID.
 
+### Files
+
+- **Download file**: Download a specific file from an item.
+- **Upload file to column**: Uploads a file to a specific file column of an item.
+
 ## Events
 
 ### Items
@@ -68,6 +73,11 @@ If you are a member or admin of a Monday.com account, follow these steps to acce
 - **On status change**: This event is triggered when a status column value changes.
 - **On item archived**: This event is triggered when an item is archived.
 - **On item deleted**: This event is triggered when an item is deleted.
+
+### Subitems
+
+- **On subitem created**: This event is triggered when a subitem is created.
+- **On subitem column changed**: This event is triggered when a column value of a subitem changes.
 
 ### Updates
 

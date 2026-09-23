@@ -1,5 +1,6 @@
 ﻿using Apps.Monday.Api;
 using Apps.Monday.Constants;
+using Apps.Monday.Helpers;
 using Apps.Monday.Invocables;
 using Apps.Monday.Models.Dtos;
 using Apps.Monday.Models.Identifiers;
@@ -21,8 +22,8 @@ public class UpdateActions(InvocationContext invocationContext, IFileManagementC
     [Action("Get update", Description = "Retrieves an update based on the specified Item ID")] 
     public async Task<UpdateResponse> GetUpdateAsync([ActionParameter] UpdateIdentifier updateIdentifier)
     {
-        var itemActions = new ItemActions(InvocationContext);
-        var item = await itemActions.GetItemAsync(updateIdentifier);
+        var helper = new ItemHelper(InvocationContext);
+        var item = await helper.GetItem(updateIdentifier.ItemId);
 
         var specificUpdate = item.Updates.FirstOrDefault(x => x.Id == updateIdentifier.UpdateId)
                              ?? throw new PluginApplicationException(
