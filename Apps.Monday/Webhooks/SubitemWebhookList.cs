@@ -26,4 +26,18 @@ public class SubitemWebhookList(InvocationContext invocationContext) : AppInvoca
             Result = new SubitemWebhookResponse(subitem, payload)
         };
     }
+    
+    [Webhook("On subitem column changed", typeof(SubitemColumnChangedHandler), 
+        Description = "This event is triggered when a column value of a subitem changes")]
+    public async Task<WebhookResponse<SubitemColumnChangedResponse>> OnSubitemColumnChanged(WebhookRequest request)
+    {
+        var payload = request.Deserialize<SubitemColumnChangedPayload>();
+        var subitem = await _itemHelper.GetItem(payload.PulseId);
+
+        return new WebhookResponse<SubitemColumnChangedResponse>
+        {
+            ReceivedWebhookRequestType = WebhookRequestType.Default,
+            Result = new SubitemColumnChangedResponse(subitem, payload)
+        };
+    }
 }
