@@ -36,8 +36,8 @@ public class FileActions(InvocationContext invocationContext, IFileManagementCli
                    throw new PluginMisconfigurationException($"File ID {fileId} was not found for item ID {itemId}");
 
         using var restClient = new RestClient();
-        var networkStream = await restClient.DownloadStreamAsync(new RestRequest(file.PublicUrl))
-                            ?? throw new PluginApplicationException($"Failed to download the file '{file.Name}'");
+        await using var networkStream = await restClient.DownloadStreamAsync(new RestRequest(file.PublicUrl))
+                                        ?? throw new PluginApplicationException($"Failed to download the file '{file.Name}'");
 
         var seekableStream = new MemoryStream();
         await networkStream.CopyToAsync(seekableStream);
@@ -58,7 +58,7 @@ public class FileActions(InvocationContext invocationContext, IFileManagementCli
             column_id = addRequest.ColumnId
         };
 
-        var stream = await fileManagementClient.DownloadAsync(addRequest.File);
+        await using var stream = await fileManagementClient.DownloadAsync(addRequest.File);
         var bytes = await stream.GetByteData();
 
         var map = new { file = "variables.file" };
